@@ -95,7 +95,11 @@ export default function Calendar() {
                     </label>
 
                     <button
-                        onClick={() => setAppointmentSubmitted(true)}
+                        onClick={() => {
+                            setAppointmentSubmitted(true)
+                            setAppointmentTime("")
+                            setAppointmentReason("")
+                        }}
                         disabled={!appointmentTime || !appointmentReason}
                     >
                         Submit
