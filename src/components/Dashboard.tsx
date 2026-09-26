@@ -4,6 +4,8 @@ import { supabase } from '../supabaseClient'
 import type { MaintenanceRequest } from '../types'
 import RequestForm from './RequestForm'
 import RequestList from './RequestList'
+import BillBreakdown from "./BillBreakdown";
+import Calendar from './Calendar'
 import ManagerStats from './ManagerStats'
 import UserManagement from './UserManagement'
 import type { UserRole } from '../types'
@@ -52,6 +54,8 @@ export default function Dashboard({ session, role, onSignOut }: { session: Sessi
       {role === 'manager' && <ManagerStats requests={requests} />}
       {role === 'manager' && <UserManagement currentUserId={session.user.id} />}
       {role === 'customer' && <RequestForm onSubmitted={fetchRequests} />}
+      {role === 'customer' && <BillBreakdown />}
+      {role === 'customer' && <Calendar />}
       <RequestList requests={requests} loading={loading} error={error} role={role} onClose={closeRequest} />
     </div>
   )
