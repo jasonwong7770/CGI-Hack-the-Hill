@@ -19,7 +19,7 @@ export default function RequestList({ requests, loading, error, role, onClose }:
 
   return (
     <section className="card">
-      <h2>{role === 'employee' ? 'All customer requests' : 'My requests'}</h2>
+      <h2>{role === 'employee' || role === 'manager' ? 'All customer requests' : 'My requests'}</h2>
       <div className="tabs" role="tablist">
         <button
           role="tab"
@@ -53,9 +53,9 @@ export default function RequestList({ requests, loading, error, role, onClose }:
                 <span className={`pill ${r.category}`}>{r.category}</span>
                 <span className="muted">{new Date(r.created_at).toLocaleString()}</span>
               </div>
-              {role === 'employee' && <p className="request-customer">Customer <code>{r.user_id}</code></p>}
+              {(role === 'employee' || role === 'manager') && <p className="request-customer">Customer <code>{r.user_id}</code></p>}
               <p>{r.message}</p>
-              {role === 'employee' && r.status === 'open' && <button className="close-request" onClick={() => onClose(r.id)}>Mark closed</button>}
+              {(role === 'employee' || role === 'manager') && r.status === 'open' && <button className="close-request" onClick={() => onClose(r.id)}>Mark closed</button>}
             </li>
           ))}
         </ul>

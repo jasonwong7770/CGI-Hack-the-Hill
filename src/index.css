@@ -221,9 +221,33 @@ button.link:hover:not(:disabled) { background: none; text-decoration: underline;
 .pill.maintenance { background: #e2eef4; color: #275c78; }
 .pill.complaint { background: #f9e7e4; color: #8f3029; }
 
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+.stat-tile { display: flex; flex-direction: column; gap: 4px; border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+.stat-value { font-size: 1.7rem; font-weight: 700; color: var(--primary); }
+.stat-label { font-size: 0.8rem; color: var(--muted); }
+
+.profile-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.profile-row { display: flex; align-items: center; gap: 12px; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+.profile-email { flex: 1; overflow-wrap: anywhere; }
+.profile-row select { padding: 6px 10px; }
+
+.role-badge {
+  text-transform: capitalize;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+}
+.role-badge.customer { background: #e2eef4; color: #275c78; }
+.role-badge.employee { background: #eaf1e6; color: #3f6b2c; }
+.role-badge.manager { background: #f3e6f7; color: #6b2c8f; }
+
 @media (prefers-color-scheme: dark) {
   .pill.maintenance { background: #254151; color: #b6d7e5; }
   .pill.complaint { background: #4b302e; color: #f2b5ad; }
+  .role-badge.customer { background: #254151; color: #b6d7e5; }
+  .role-badge.employee { background: #2c4324; color: #c1e0ac; }
+  .role-badge.manager { background: #402c4c; color: #e0b6f2; }
   .banner { background: #403722; color: #ecd7a5; }
 }
 
@@ -249,4 +273,100 @@ button.link:hover:not(:disabled) { background: none; text-decoration: underline;
 
 @media (max-width: 560px) {
   .welcome-photo .welcome-topbar { padding: 0 18px; }
+}
+
+/* Bill Breakdown */
+.last-updated {
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-align: right;
+  margin: -8px 0 16px;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+
+}
+
+.bill-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.bill-total {
+  font-weight: 700;
+  font-size: 1.05rem;
+  border-bottom: none;
+  padding-top: 16px;
+}
+
+/* Calendar */
+.top-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  text-align: center;
+}
+
+.calendar-days button {
+  margin: 0;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.calendar-days button:hover {
+  background: var(--surface-hover);
+}
+
+.calendar-days button.selected {
+  background: var(--primary);
+  color: white;
+}
+
+.calendar-days button.past {
+  opacity: 0.4;
+}
+
+.appointment-form label + label {
+  margin-top: 10px;
+}
+
+.appointment-form > button {
+  display: block;
+  margin: 20px auto 0;
+  width: 100%;
+}
+
+
+.appointment-form input[type="time"] {
+  outline: none;
+}
+
+.appointment-form input[type="time"]:focus {
+  outline: none;
+  box-shadow: none;
 }

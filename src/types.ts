@@ -1,6 +1,6 @@
 export type RequestCategory = 'complaint' | 'maintenance'
 export type RequestStatus = 'open' | 'closed'
-export type UserRole = 'customer' | 'employee'
+export type UserRole = 'customer' | 'employee' | 'manager'
 
 export interface MaintenanceRequest {
   id: string
@@ -9,4 +9,10 @@ export interface MaintenanceRequest {
   message: string
   status: RequestStatus
   created_at: string
+}
+
+export interface Profile {
+  id: string
+  email: string | null
+  role: UserRole
 }
