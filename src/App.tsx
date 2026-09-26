@@ -37,6 +37,7 @@ export default function App() {
     supabase.from('profiles').select('role').eq('id', session.user.id).single()
       .then(({ data, error }) => {
         if (!active) return
+        if (error) console.error('Failed to load profile role:', error)
         setRole(error ? null : data?.role === 'manager' ? 'manager' : data?.role === 'employee' ? 'employee' : 'customer')
         setCheckingRole(false)
       })

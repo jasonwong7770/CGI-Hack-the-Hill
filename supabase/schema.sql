@@ -72,16 +72,28 @@ create policy "Users can view own requests"
   to authenticated
   using (auth.uid() = user_id);
 
+-- Looks up the caller's own role bypassing RLS (security definer), so
+-- policies can check "am I an employee/manager?" without re-triggering
+-- profiles' own row-level security. Querying public.profiles directly from
+-- inside a profiles (or requests) policy causes Postgres to re-evaluate every
+-- profiles SELECT policy for the inner query too, including this one, which
+-- previously caused "infinite recursion detected in policy for relation
+-- profiles" (42P17) on every read once the manager policies were added.
+create or replace function public.current_user_role()
+returns text
+language sql
+security definer
+stable
+set search_path = public
+as $$
+  select role from public.profiles where id = auth.uid();
+$$;
+
 drop policy if exists "Employees can view all requests" on public.requests;
 create policy "Employees can view all requests"
   on public.requests for select
   to authenticated
-  using (
-    exists (
-      select 1 from public.profiles
-      where profiles.id = auth.uid() and profiles.role in ('employee', 'manager')
-    )
-  );
+  using (public.current_user_role() in ('employee', 'manager'));
 
 drop policy if exists "Users can insert own requests" on public.requests;
 create policy "Users can insert own requests"
@@ -93,18 +105,8 @@ drop policy if exists "Employees can close requests" on public.requests;
 create policy "Employees can close requests"
   on public.requests for update
   to authenticated
-  using (
-    exists (
-      select 1 from public.profiles
-      where profiles.id = auth.uid() and profiles.role in ('employee', 'manager')
-    )
-  )
-  with check (
-    exists (
-      select 1 from public.profiles
-      where profiles.id = auth.uid() and profiles.role in ('employee', 'manager')
-    )
-  );
+  using (public.current_user_role() in ('employee', 'manager'))
+  with check (public.current_user_role() in ('employee', 'manager'));
 
 revoke update on public.requests from authenticated;
 grant update (status) on public.requests to authenticated;
@@ -113,36 +115,14 @@ drop policy if exists "Managers can view all profiles" on public.profiles;
 create policy "Managers can view all profiles"
   on public.profiles for select
   to authenticated
-  using (
-    exists (
-      select 1 from public.profiles as actor
-      where actor.id = auth.uid() and actor.role = 'manager'
-    )
-  );
+  using (public.current_user_role() = 'manager');
 
--- Recursion note: the exists() subquery above re-queries profiles, which is
--- itself subject to profiles' SELECT policies. For the row actor.id =
--- auth.uid(), the unconditional "Users can view own profile" policy matches
--- directly and terminates the recursion in one step. Do not remove that
--- policy without re-checking this.
 drop policy if exists "Managers can update other profiles role" on public.profiles;
 create policy "Managers can update other profiles role"
   on public.profiles for update
   to authenticated
-  using (
-    auth.uid() <> id
-    and exists (
-      select 1 from public.profiles as actor
-      where actor.id = auth.uid() and actor.role = 'manager'
-    )
-  )
-  with check (
-    auth.uid() <> id
-    and exists (
-      select 1 from public.profiles as actor
-      where actor.id = auth.uid() and actor.role = 'manager'
-    )
-  );
+  using (auth.uid() <> id and public.current_user_role() = 'manager')
+  with check (auth.uid() <> id and public.current_user_role() = 'manager');
 
 revoke update on public.profiles from authenticated;
 grant update (role) on public.profiles to authenticated;
