@@ -4,10 +4,15 @@ import type { UserRole } from '../types'
 
 type Mode = 'login' | 'signup'
 
+// TEMPORARY TEST ONLY: these credentials are exposed in the frontend bundle.
+// Remove them before production and use Supabase-managed credentials instead.
+const EMPLOYEE_TEST_EMAIL = 'support@northwind.ca'
+const EMPLOYEE_TEST_PASSWORD = '12345678'
+
 export default function Auth({ role, onBack }: { role: UserRole; onBack: () => void }) {
   const [mode, setMode] = useState<Mode>('login')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState(role === 'employee' ? EMPLOYEE_TEST_EMAIL : '')
+  const [password, setPassword] = useState(role === 'employee' ? EMPLOYEE_TEST_PASSWORD : '')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [info, setInfo] = useState<string | null>(null)
