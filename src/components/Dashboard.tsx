@@ -6,6 +6,8 @@ import RequestForm from './RequestForm'
 import RequestList from './RequestList'
 import BillBreakdown from "./BillBreakdown";
 import Calendar from './Calendar'
+import ManagerStats from './ManagerStats'
+import UserManagement from './UserManagement'
 import type { UserRole } from '../types'
 
 export default function Dashboard({ session, role, onSignOut }: { session: Session; role: UserRole; onSignOut: () => void }) {
@@ -41,7 +43,7 @@ export default function Dashboard({ session, role, onSignOut }: { session: Sessi
   return (
     <div className="dashboard">
       <header className="topbar">
-        <div><span className="brand small">Northwind <span>Utilities</span></span><span className="role-label">{role === 'employee' ? 'Employee workspace' : 'Customer account'}</span></div>
+        <div><span className="brand small">Northwind <span>Utilities</span></span><span className="role-label">{role === 'manager' ? 'Manager dashboard' : role === 'employee' ? 'Employee workspace' : 'Customer account'}</span></div>
         <div className="account-actions"><span className="muted">{session.user.email}</span>
         <button className="secondary" onClick={async () => { await supabase.auth.signOut(); onSignOut() }}>
           Log out
@@ -49,6 +51,8 @@ export default function Dashboard({ session, role, onSignOut }: { session: Sessi
         </div>
       </header>
 
+      {role === 'manager' && <ManagerStats requests={requests} />}
+      {role === 'manager' && <UserManagement currentUserId={session.user.id} />}
       {role === 'customer' && <RequestForm onSubmitted={fetchRequests} />}
       {role === 'customer' && <BillBreakdown />}
       {role === 'customer' && <Calendar />}
