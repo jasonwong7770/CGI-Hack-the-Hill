@@ -25,6 +25,23 @@ on conflict (id) do nothing;
 alter table public.profiles enable row level security;
 grant select on public.profiles to authenticated;
 
+-- Human-readable identifier for staff/customer management screens. The anon
+-- key can't read auth.users directly, so we keep a copy here. This is a
+-- point-in-time copy taken at signup; it will not track later email changes
+-- in auth.users, which is an accepted limitation for this app's scope.
+alter table public.profiles add column if not exists email text;
+
+update public.profiles p
+set email = u.email
+from auth.users u
+where p.id = u.id and p.email is distinct from u.email;
+
+-- Widen the role constraint to add 'manager'. Look up the actual constraint
+-- name (e.g. via `\d public.profiles`) if this default name doesn't match.
+alter table public.profiles drop constraint if exists profiles_role_check;
+alter table public.profiles add constraint profiles_role_check
+  check (role in ('customer', 'employee', 'manager'));
+
 create or replace function public.create_customer_profile()
 returns trigger
 language plpgsql
@@ -32,7 +49,7 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, role) values (new.id, 'customer')
+  insert into public.profiles (id, role, email) values (new.id, 'customer', new.email)
   on conflict (id) do nothing;
   return new;
 end;
@@ -62,7 +79,7 @@ create policy "Employees can view all requests"
   using (
     exists (
       select 1 from public.profiles
-      where profiles.id = auth.uid() and profiles.role = 'employee'
+      where profiles.id = auth.uid() and profiles.role in ('employee', 'manager')
     )
   );
 
@@ -79,21 +96,65 @@ create policy "Employees can close requests"
   using (
     exists (
       select 1 from public.profiles
-      where profiles.id = auth.uid() and profiles.role = 'employee'
+      where profiles.id = auth.uid() and profiles.role in ('employee', 'manager')
     )
   )
   with check (
     exists (
       select 1 from public.profiles
-      where profiles.id = auth.uid() and profiles.role = 'employee'
+      where profiles.id = auth.uid() and profiles.role in ('employee', 'manager')
     )
   );
 
 revoke update on public.requests from authenticated;
 grant update (status) on public.requests to authenticated;
 
+drop policy if exists "Managers can view all profiles" on public.profiles;
+create policy "Managers can view all profiles"
+  on public.profiles for select
+  to authenticated
+  using (
+    exists (
+      select 1 from public.profiles as actor
+      where actor.id = auth.uid() and actor.role = 'manager'
+    )
+  );
+
+-- Recursion note: the exists() subquery above re-queries profiles, which is
+-- itself subject to profiles' SELECT policies. For the row actor.id =
+-- auth.uid(), the unconditional "Users can view own profile" policy matches
+-- directly and terminates the recursion in one step. Do not remove that
+-- policy without re-checking this.
+drop policy if exists "Managers can update other profiles role" on public.profiles;
+create policy "Managers can update other profiles role"
+  on public.profiles for update
+  to authenticated
+  using (
+    auth.uid() <> id
+    and exists (
+      select 1 from public.profiles as actor
+      where actor.id = auth.uid() and actor.role = 'manager'
+    )
+  )
+  with check (
+    auth.uid() <> id
+    and exists (
+      select 1 from public.profiles as actor
+      where actor.id = auth.uid() and actor.role = 'manager'
+    )
+  );
+
+revoke update on public.profiles from authenticated;
+grant update (role) on public.profiles to authenticated;
+
 -- To promote an existing trusted account to employee, run this as a Supabase
 -- administrator after replacing the email address:
 -- update public.profiles
 -- set role = 'employee'
 -- where id = (select id from auth.users where email = 'staff@example.com');
+
+-- To promote an existing trusted account to manager, run this as a Supabase
+-- administrator after replacing the email address:
+-- update public.profiles
+-- set role = 'manager'
+-- where id = (select id from auth.users where email = 'manager@example.com');

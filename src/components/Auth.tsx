@@ -8,11 +8,13 @@ type Mode = 'login' | 'signup'
 // Remove them before production and use Supabase-managed credentials instead.
 const EMPLOYEE_TEST_EMAIL = 'support@northwind.ca'
 const EMPLOYEE_TEST_PASSWORD = '12345678'
+const MANAGER_TEST_EMAIL = 'manager@northwind.ca'
+const MANAGER_TEST_PASSWORD = '12345678'
 
 export default function Auth({ role, onBack }: { role: UserRole; onBack: () => void }) {
   const [mode, setMode] = useState<Mode>('login')
-  const [email, setEmail] = useState(role === 'employee' ? EMPLOYEE_TEST_EMAIL : '')
-  const [password, setPassword] = useState(role === 'employee' ? EMPLOYEE_TEST_PASSWORD : '')
+  const [email, setEmail] = useState(role === 'manager' ? MANAGER_TEST_EMAIL : role === 'employee' ? EMPLOYEE_TEST_EMAIL : '')
+  const [password, setPassword] = useState(role === 'manager' ? MANAGER_TEST_PASSWORD : role === 'employee' ? EMPLOYEE_TEST_PASSWORD : '')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [info, setInfo] = useState<string | null>(null)
@@ -44,9 +46,9 @@ export default function Auth({ role, onBack }: { role: UserRole; onBack: () => v
   return (
     <div className="card auth">
       <button type="button" className="link back-link" onClick={onBack}>← Back</button>
-      <p className="eyebrow">{role === 'employee' ? 'Employee portal' : 'Customer portal'}</p>
+      <p className="eyebrow">{role === 'manager' ? 'Manager portal' : role === 'employee' ? 'Employee portal' : 'Customer portal'}</p>
       <h1>{mode === 'login' ? 'Log in' : 'Sign up'}</h1>
-      <p className="muted">{role === 'employee' ? 'Sign in with your employee account.' : 'Submit complaints and maintenance requests.'}</p>
+      <p className="muted">{role === 'manager' ? 'Sign in with your manager account.' : role === 'employee' ? 'Sign in with your employee account.' : 'Submit complaints and maintenance requests.'}</p>
 
       <form onSubmit={handleSubmit}>
         <label>
