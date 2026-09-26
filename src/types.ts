@@ -1,5 +1,6 @@
 export type RequestCategory = 'complaint' | 'maintenance'
 export type RequestStatus = 'open' | 'closed'
+export type UserRole = 'customer' | 'employee'
 
 export interface MaintenanceRequest {
   id: string

@@ -26,7 +26,7 @@
 
 body { margin: 0; background: var(--bg); }
 
-.app { max-width: 640px; margin: 0 auto; padding: 32px 16px; }
+.app { max-width: 1040px; margin: 0 auto; padding: 32px 24px; }
 
 .card {
   background: var(--card);
@@ -37,6 +37,30 @@ body { margin: 0; background: var(--bg); }
 }
 
 .auth { max-width: 400px; margin: 60px auto; }
+
+.welcome { min-height: calc(100vh - 64px); display: flex; flex-direction: column; }
+.welcome-topbar { display: flex; justify-content: space-between; align-items: center; }
+.brand { font-size: 1.35rem; font-weight: 800; letter-spacing: -.06em; }
+.brand > span { color: #c26b4b; }
+.brand.small { font-size: 1.2rem; }
+.welcome-hero { flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 72px 0 100px; max-width: 620px; }
+.eyebrow { color: #9a634e; font-size: .76rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 14px; }
+.welcome-hero h1 { font-size: clamp(3.5rem, 9vw, 6.4rem); line-height: .96; letter-spacing: -.075em; margin-bottom: 24px; }
+.welcome-hero h1 span { color: #b66a4a; }
+.welcome-copy { max-width: 440px; color: var(--muted); font-size: 1.1rem; line-height: 1.7; margin: 0 0 28px; }
+.hero-button { background: #283c34; padding: 14px 20px; }
+.hero-button:hover:not(:disabled) { background: #1f302a; }
+.hero-button span { padding-left: 18px; }
+.welcome-foot { display: flex; justify-content: space-between; border-top: 1px solid var(--border); padding: 18px 0; color: var(--muted); font-size: .88rem; }
+.modal-backdrop { position: fixed; inset: 0; background: #15231ccc; display: grid; place-items: center; padding: 20px; z-index: 5; }
+.role-picker { position: relative; width: min(100%, 440px); margin: 0; padding: 32px; }
+.role-picker h2 { margin-bottom: 22px; }
+.modal-close { position: absolute; right: 16px; top: 14px; background: none; color: var(--muted); font-size: 1.5rem; padding: 4px 10px; }
+.modal-close:hover:not(:disabled) { background: var(--bg); }
+.role-choice { width: 100%; display: flex; flex-direction: column; align-items: flex-start; gap: 5px; text-align: left; background: var(--bg); color: var(--text); border: 1px solid var(--border); margin-top: 10px; }
+.role-choice:hover:not(:disabled) { background: #f0e9e3; }
+.role-choice span { color: var(--muted); font-size: .86rem; font-weight: 400; }
+.back-link { margin-bottom: 18px; }
 
 h1, h2 { margin: 0 0 8px; }
 h2 { font-size: 1.2rem; margin-bottom: 16px; }
@@ -75,6 +99,8 @@ button.link { background: none; color: var(--primary); padding: 0; font-weight: 
 button.link:hover:not(:disabled) { background: none; text-decoration: underline; }
 
 .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.role-label { color: var(--muted); font-size: .82rem; margin-left: 12px; }
+.account-actions { display: flex; align-items: center; gap: 12px; }
 
 .muted { color: var(--muted); }
 .center { text-align: center; }
@@ -116,6 +142,10 @@ button.link:hover:not(:disabled) { background: none; text-decoration: underline;
 .requests { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
 .requests li { border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
 .requests p { margin: 8px 0 0; white-space: pre-wrap; word-break: break-word; }
+.request-customer { font-size: .8rem; color: var(--muted); }
+.request-customer code { overflow-wrap: anywhere; }
+.close-request { margin-top: 12px; padding: 7px 12px; font-size: .82rem; background: #283c34; }
+.close-request:hover:not(:disabled) { background: #1f302a; }
 .request-meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 0.8rem; }
 
 .pill {

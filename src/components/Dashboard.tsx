@@ -4,8 +4,9 @@ import { supabase } from '../supabaseClient'
 import type { MaintenanceRequest } from '../types'
 import RequestForm from './RequestForm'
 import RequestList from './RequestList'
+import type { UserRole } from '../types'
 
-export default function Dashboard({ session }: { session: Session }) {
+export default function Dashboard({ session, role, onSignOut }: { session: Session; role: UserRole; onSignOut: () => void }) {
   const [requests, setRequests] = useState<MaintenanceRequest[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -25,6 +26,12 @@ export default function Dashboard({ session }: { session: Session }) {
     setLoading(false)
   }, [])
 
+  async function closeRequest(requestId: string) {
+    const { error } = await supabase.from('requests').update({ status: 'closed' }).eq('id', requestId)
+    if (error) setError(error.message)
+    else fetchRequests()
+  }
+
   useEffect(() => {
     fetchRequests()
   }, [fetchRequests])
@@ -32,14 +39,16 @@ export default function Dashboard({ session }: { session: Session }) {
   return (
     <div className="dashboard">
       <header className="topbar">
-        <span className="muted">{session.user.email}</span>
-        <button className="secondary" onClick={() => supabase.auth.signOut()}>
+        <div><span className="brand small">Haven<span>.</span></span><span className="role-label">{role === 'employee' ? 'Employee workspace' : 'Customer account'}</span></div>
+        <div className="account-actions"><span className="muted">{session.user.email}</span>
+        <button className="secondary" onClick={async () => { await supabase.auth.signOut(); onSignOut() }}>
           Log out
         </button>
+        </div>
       </header>
 
-      <RequestForm onSubmitted={fetchRequests} />
-      <RequestList requests={requests} loading={loading} error={error} />
+      {role === 'customer' && <RequestForm onSubmitted={fetchRequests} />}
+      <RequestList requests={requests} loading={loading} error={error} role={role} onClose={closeRequest} />
     </div>
   )
 }

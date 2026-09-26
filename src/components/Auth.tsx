@@ -1,9 +1,10 @@
 import { useState, type FormEvent } from 'react'
 import { supabase } from '../supabaseClient'
+import type { UserRole } from '../types'
 
 type Mode = 'login' | 'signup'
 
-export default function Auth() {
+export default function Auth({ role, onBack }: { role: UserRole; onBack: () => void }) {
   const [mode, setMode] = useState<Mode>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -37,8 +38,10 @@ export default function Auth() {
 
   return (
     <div className="card auth">
+      <button type="button" className="link back-link" onClick={onBack}>← Back</button>
+      <p className="eyebrow">{role === 'employee' ? 'Employee portal' : 'Customer portal'}</p>
       <h1>{mode === 'login' ? 'Log in' : 'Sign up'}</h1>
-      <p className="muted">Submit complaints and maintenance requests.</p>
+      <p className="muted">{role === 'employee' ? 'Sign in with your employee account.' : 'Submit complaints and maintenance requests.'}</p>
 
       <form onSubmit={handleSubmit}>
         <label>
@@ -65,12 +68,10 @@ export default function Auth() {
         </button>
       </form>
 
-      <p className="switch">
+      {role === 'customer' && <p className="switch">
         {mode === 'login' ? "Don't have an account?" : 'Already have an account?'}{' '}
-        <button type="button" className="link" onClick={switchMode}>
-          {mode === 'login' ? 'Sign up' : 'Log in'}
-        </button>
-      </p>
+        <button type="button" className="link" onClick={switchMode}>{mode === 'login' ? 'Sign up' : 'Log in'}</button>
+      </p>}
     </div>
   )
 }
