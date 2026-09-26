@@ -2,10 +2,12 @@ export default function BillBreakdown() {
     return (
         <section className="card">
             <h2>Bill Breakdown</h2>
-            <p className="last-updated">Last updated: September 26, 2026 at 12:15 PM</p>
+            <p className="last-updated">
+                Last Updated: September 26, 2026 at 12:15 PM
+            </p>
 
             <div className="total">
-                <p>Current Billing Period: September 1-30, 2026</p>
+                <p>Current Billing Period: September 1 - 30, 2026</p>
             </div>
 
             <div>
