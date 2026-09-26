@@ -176,8 +176,32 @@ button.link:hover:not(:disabled) { background: none; text-decoration: underline;
 .pill.maintenance { background: #e2eef4; color: #275c78; }
 .pill.complaint { background: #f9e7e4; color: #8f3029; }
 
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+.stat-tile { display: flex; flex-direction: column; gap: 4px; border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+.stat-value { font-size: 1.7rem; font-weight: 700; color: var(--primary); }
+.stat-label { font-size: 0.8rem; color: var(--muted); }
+
+.profile-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.profile-row { display: flex; align-items: center; gap: 12px; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+.profile-email { flex: 1; overflow-wrap: anywhere; }
+.profile-row select { padding: 6px 10px; }
+
+.role-badge {
+  text-transform: capitalize;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+}
+.role-badge.customer { background: #e2eef4; color: #275c78; }
+.role-badge.employee { background: #eaf1e6; color: #3f6b2c; }
+.role-badge.manager { background: #f3e6f7; color: #6b2c8f; }
+
 @media (prefers-color-scheme: dark) {
   .pill.maintenance { background: #254151; color: #b6d7e5; }
   .pill.complaint { background: #4b302e; color: #f2b5ad; }
+  .role-badge.customer { background: #254151; color: #b6d7e5; }
+  .role-badge.employee { background: #2c4324; color: #c1e0ac; }
+  .role-badge.manager { background: #402c4c; color: #e0b6f2; }
   .banner { background: #403722; color: #ecd7a5; }
 }

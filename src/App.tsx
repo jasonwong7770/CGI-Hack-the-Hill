@@ -12,6 +12,7 @@ export default function App() {
   const [checkingRole, setCheckingRole] = useState(false)
   const [authRole, setAuthRole] = useState<UserRole | null>(null)
   const [showRolePicker, setShowRolePicker] = useState(false)
+  const [showStaffPicker, setShowStaffPicker] = useState(false)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -36,7 +37,7 @@ export default function App() {
     supabase.from('profiles').select('role').eq('id', session.user.id).single()
       .then(({ data, error }) => {
         if (!active) return
-        setRole(error ? null : data?.role === 'employee' ? 'employee' : 'customer')
+        setRole(error ? null : data?.role === 'manager' ? 'manager' : data?.role === 'employee' ? 'employee' : 'customer')
         setCheckingRole(false)
       })
     return () => { active = false }
@@ -44,7 +45,13 @@ export default function App() {
 
   function chooseRole(selected: UserRole) {
     setShowRolePicker(false)
+    setShowStaffPicker(false)
     setAuthRole(selected)
+  }
+
+  function openStaffPicker() {
+    setShowRolePicker(false)
+    setShowStaffPicker(true)
   }
 
   function onSignedOut() {
@@ -72,13 +79,21 @@ export default function App() {
             <p className="welcome-copy">Northwind Utilities is a regulated energy and water provider serving 1.8 million customers. Submit a service request and follow its progress here.</p>
             <button className="hero-button" onClick={() => chooseRole('customer')}>Get started <span aria-hidden="true">→</span></button>
           </section>
-          <div className="welcome-foot"><span>Reliable service for the communities we call home.</span><button className="link" onClick={() => chooseRole('employee')}>Employee access</button></div>
+          <div className="welcome-foot"><span>Reliable service for the communities we call home.</span><button className="link" onClick={openStaffPicker}>Employee access</button></div>
           {showRolePicker && <div className="modal-backdrop" role="presentation" onClick={() => setShowRolePicker(false)}>
             <section className="role-picker card" role="dialog" aria-modal="true" aria-labelledby="role-title" onClick={(event) => event.stopPropagation()}>
               <button className="modal-close" aria-label="Close" onClick={() => setShowRolePicker(false)}>×</button>
               <p className="eyebrow">Northwind Utilities</p><h2 id="role-title">How would you like to continue?</h2>
               <button className="role-choice" onClick={() => chooseRole('customer')}><strong>I’m a customer</strong><span>Submit and track a service request</span></button>
+              <button className="role-choice" onClick={openStaffPicker}><strong>I’m an employee</strong><span>Review customer requests</span></button>
+            </section>
+          </div>}
+          {showStaffPicker && <div className="modal-backdrop" role="presentation" onClick={() => setShowStaffPicker(false)}>
+            <section className="role-picker card" role="dialog" aria-modal="true" aria-labelledby="staff-title" onClick={(event) => event.stopPropagation()}>
+              <button className="modal-close" aria-label="Close" onClick={() => setShowStaffPicker(false)}>×</button>
+              <p className="eyebrow">Northwind Utilities</p><h2 id="staff-title">Which staff account?</h2>
               <button className="role-choice" onClick={() => chooseRole('employee')}><strong>I’m an employee</strong><span>Review customer requests</span></button>
+              <button className="role-choice" onClick={() => chooseRole('manager')}><strong>I’m a manager</strong><span>Oversee requests and manage staff accounts</span></button>
             </section>
           </div>}
         </main>
