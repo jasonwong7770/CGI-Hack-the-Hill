@@ -345,10 +345,11 @@ button.link:hover:not(:disabled) { background: none; text-decoration: underline;
 .calendar-days button.selected {
   background: var(--primary);
   color: white;
+  opacity: 0.7;
 }
 
 .calendar-days button.past {
-  opacity: 0.4;
+  opacity: 0.3;
 }
 
 .appointment-form label + label {
@@ -361,7 +362,6 @@ button.link:hover:not(:disabled) { background: none; text-decoration: underline;
   width: 100%;
 }
 
-
 .appointment-form input[type="time"] {
   outline: none;
 }
@@ -369,4 +369,8 @@ button.link:hover:not(:disabled) { background: none; text-decoration: underline;
 .appointment-form input[type="time"]:focus {
   outline: none;
   box-shadow: none;
+}
+
+.appointment-form .info {
+  margin-top: 16px;
 }
