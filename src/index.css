@@ -181,3 +181,33 @@ button.link:hover:not(:disabled) { background: none; text-decoration: underline;
   .pill.complaint { background: #4b302e; color: #f2b5ad; }
   .banner { background: #403722; color: #ecd7a5; }
 }
+
+.last-updated {
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-align: right;
+  margin: -8px 0 16px;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.bill-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.bill-total {
+  font-weight: 700;
+  font-size: 1.05rem;
+  border-bottom: none;
+  padding-top: 16px;
+}
