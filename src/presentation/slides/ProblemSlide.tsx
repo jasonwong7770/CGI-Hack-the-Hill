@@ -6,14 +6,14 @@ import { BillingShareChart, DaysToCloseChart, TransferChart } from './ProblemCha
 
 // From the CGI challenge data: complaints (A), systems (B), monthly KPIs (C)
 const PAINS: { stat: string; text: string; chart: ReactNode }[] = [
-  { stat: '4×', text: 'longer to close a complaint than two years ago', chart: <DaysToCloseChart /> },
+  { stat: '5×', text: 'longer to close a complaint than two years ago', chart: <DaysToCloseChart /> },
   { stat: '35%', text: 'of complaints bounce between systems; those reopen 3× as often', chart: <TransferChart /> },
   { stat: '51%', text: 'of complaints are about billing, but the portal can’t break down a bill', chart: <BillingShareChart /> },
 ]
 
 export default function ProblemSlide() {
   return (
-    <SlideLayout eyebrow="The problem" title="A complaint now takes 38 days to close">
+    <SlideLayout eyebrow="The problem" title="A complaint now takes 43.8 days to close">
       <div className="grid-3">
         {PAINS.map((pain, i) => (
           <Reveal key={pain.stat} step={3 + i}>

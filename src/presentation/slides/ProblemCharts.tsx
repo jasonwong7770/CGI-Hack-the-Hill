@@ -29,8 +29,8 @@ const MONTHS = [
   'Feb 2026', 'Mar 2026', 'Apr 2026', 'May 2026', 'Jun 2026', 'Jul 2026', 'Aug 2026', 'Sep 2026',
 ]
 const DAYS_TO_CLOSE = [
-  9.1, 16.5, 18.4, 19.5, 20.1, 21.4, 22.0, 23.2, 23.1, 24.9, 26.6, 28.6, 27.6, 29.8, 29.6, 31.0, 33.6, 32.8, 33.3,
-  34.6, 35.9, 35.7, 37.4, 38.2,
+  9.1, 16.5, 18.4, 19.5, 20.1, 21.4, 22.0, 23.2, 23.1, 24.9, 26.6, 28.6, 27.6, 29.8, 29.6, 31.0, 33.6, 32.8, 34.3,
+  35.6, 37.9, 39.7, 41.4, 43.8,
 ]
 
 export function DaysToCloseChart() {
@@ -71,7 +71,7 @@ export function DaysToCloseChart() {
           9 days
         </text>
         <text className="chart-value" x={x(last)} y={y(DAYS_TO_CLOSE[last]) - 14} textAnchor="end">
-          38 days
+          43.8 days
         </text>
         <text className="chart-tick" x={left} y={H - 4}>
           {MONTHS[0]}
