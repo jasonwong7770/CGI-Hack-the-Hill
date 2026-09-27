@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import type { MaintenanceRequest } from '../types'
 
-export default function Calendar() {
+export default function Calendar({ employeeView = false, requests = [] }: { employeeView?: boolean; requests?: MaintenanceRequest[] }) {
     const [selectedDay, setSelectedDay] = useState<number | null>(null)
 
     const [appointmentTime, setAppointmentTime] = useState("")
@@ -18,6 +19,8 @@ export default function Calendar() {
     const today = new Date()
 
     const firstDay = currentDate.getDay()
+    const demoRequest = requests.find((request) => request.status === 'open') ?? requests[0]
+    const hasDemoAppointment = employeeView && Boolean(demoRequest) && currentDate.getFullYear() === 2026 && currentDate.getMonth() === 8
 
     return (
         <section className="card">
@@ -62,16 +65,29 @@ export default function Calendar() {
                         <button
                             key={day}
                             onClick={() => setSelectedDay(day)}
-                            className={`${selectedDay === day ? "selected" : ""} ${isPast ? "past" : ""}`}
+                            className={`${selectedDay === day ? "selected" : ""} ${isPast ? "past" : ""} ${hasDemoAppointment && day === 28 ? "has-appointment" : ""}`}
+                            aria-label={`${currentDate.toLocaleString('default', { month: 'long' })} ${day}${hasDemoAppointment && day === 28 ? ', 1 appointment' : ''}`}
                         >
                             {day}
+                            {hasDemoAppointment && day === 28 && <span className="calendar-event-dot" aria-hidden="true" />}
                         </button>
                     )
                 })}
             </div>
 
             {selectedDay && (
-                <div className="appointment-form">
+                employeeView ? (
+                    <div className="appointment-form">
+                        <p><strong>Appointments for {currentDate.toLocaleString('default', { month: 'long' })} {selectedDay}, {currentDate.getFullYear()}</strong></p>
+                        {hasDemoAppointment && selectedDay === 28 && demoRequest ? (
+                            <article className="scheduled-appointment">
+                                <div className="appointment-meta"><span className={`pill ${demoRequest.category}`}>{demoRequest.category}</span><span>10:00 AM</span></div>
+                                <p>{demoRequest.message}</p>
+                                <p className="muted">From request submitted {new Date(demoRequest.created_at).toLocaleDateString()}</p>
+                            </article>
+                        ) : <p className="muted">No appointments scheduled for this date.</p>}
+                    </div>
+                ) : <div className="appointment-form">
                     <p>
                         Selected Date: {currentDate.toLocaleString('default', { month: 'long' })} {selectedDay}, {currentDate.getFullYear()}
                     </p>

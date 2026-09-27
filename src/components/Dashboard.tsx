@@ -77,6 +77,7 @@ export default function Dashboard({ session, role, onSignOut }: { session: Sessi
       {role === 'manager' && <StaffingDashboard />}
       {role === 'manager' && <ManagerStats requests={requests} />}
       {role === 'manager' && <UserManagement currentUserId={session.user.id} />}
+      {role === 'employee' && <Calendar employeeView requests={requests} />}
 
       {role === 'customer' && (
         <>

@@ -395,6 +395,14 @@ button.link:hover:not(:disabled) { background: none; text-decoration: underline;
   opacity: 0.3;
 }
 
+.calendar-days button.has-appointment { position: relative; }
+.calendar-event-dot { position: absolute; bottom: 5px; left: 50%; width: 6px; height: 6px; border-radius: 50%; transform: translateX(-50%); background: var(--energy); }
+.calendar-days button.selected .calendar-event-dot { background: currentColor; }
+.scheduled-appointment { border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+.appointment-meta { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: .85rem; font-weight: 600; }
+.scheduled-appointment p { margin: 10px 0 0; }
+.scheduled-appointment .muted { font-size: .8rem; }
+
 .appointment-form label + label {
   margin-top: 10px;
 }
