@@ -8,6 +8,7 @@ import BillBreakdown from "./BillBreakdown";
 import Calendar from './Calendar'
 import ManagerStats from './ManagerStats'
 import UserManagement from './UserManagement'
+import StaffingDashboard from './StaffingDashboard'
 import type { UserRole } from '../types'
 
 export default function Dashboard({ session, role, onSignOut }: { session: Session; role: UserRole; onSignOut: () => void }) {
@@ -51,6 +52,7 @@ export default function Dashboard({ session, role, onSignOut }: { session: Sessi
         </div>
       </header>
 
+      {role === 'manager' && <StaffingDashboard />}
       {role === 'manager' && <ManagerStats requests={requests} />}
       {role === 'manager' && <UserManagement currentUserId={session.user.id} />}
       {role === 'customer' && <RequestForm onSubmitted={fetchRequests} />}
