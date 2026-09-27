@@ -1,12 +1,13 @@
 import type { SlideDef } from './types'
 import CustomerFeaturesSlide from './slides/CustomerFeaturesSlide'
+import DataFindingsSlide from './slides/DataFindingsSlide'
+import DataMapSlide from './slides/DataMapSlide'
 import DemoSlide from './slides/DemoSlide'
 import ImpactSlide from './slides/ImpactSlide'
 import ProblemSlide from './slides/ProblemSlide'
 import RolesSlide from './slides/RolesSlide'
 import SolutionSlide from './slides/SolutionSlide'
 import StaffFeaturesSlide from './slides/StaffFeaturesSlide'
-import TeamSlide from './slides/TeamSlide'
 import TechSlide from './slides/TechSlide'
 import ThanksSlide from './slides/ThanksSlide'
 import TitleSlide from './slides/TitleSlide'
@@ -19,9 +20,8 @@ export const slides: SlideDef[] = [
     title: 'Northwind Utilities',
     zone: 'sky',
     Component: TitleSlide,
-    notes: 'Name the project and the CGI CRM challenge. ~15s',
+    notes: 'Name the project and the CGI CRM challenge, then the four of us by name. ~20s',
   },
-  { id: 'team', title: 'Team', zone: 'sky', Component: TeamSlide, notes: 'Quick round of names. ~15s' },
   {
     id: 'problem',
     title: 'The problem',
@@ -29,6 +29,14 @@ export const slides: SlideDef[] = [
     Component: ProblemSlide,
     notes:
       'Context: 1.8M customers, complaints up 37%, first-contact resolution 62%→41%, regulator score 4.3→2.6/5. Then walk the charts: 9→38 days; transfers cost $121 vs $68 and reopen 3×; half are billing. ~40s',
+  },
+  {
+    id: 'findings',
+    title: 'What the data showed',
+    zone: 'powerlines',
+    Component: DataFindingsSlide,
+    notes:
+      'Files A–G are the challenge CSVs (legend at the bottom). One root cause per file: missed appointments (A), COBOL billing and unlinked systems (B), the failed AI pilot (E), Calderfield staffing (G). ~30s',
   },
   {
     id: 'solution',
@@ -51,6 +59,14 @@ export const slides: SlideDef[] = [
     zone: 'soil',
     Component: StaffFeaturesSlide,
     notes: 'One queue instead of four systems. Staffing: point at Calderfield (41% attrition, 32 vacancies). ~25s',
+  },
+  {
+    id: 'data-map',
+    title: 'Fixes by dashboard',
+    zone: 'soil',
+    Component: DataMapSlide,
+    notes:
+      'Built: calendar (A), bill breakdown (B), shared queue (B), staffing (G). Next: REST API framework (B) across all three, RAG pipeline (E). Customer solves A B E, employee B, manager B G. ~30s',
   },
   {
     id: 'demo',

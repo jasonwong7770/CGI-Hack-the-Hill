@@ -11,6 +11,8 @@ const NEXT = [
   'Save appointments to the database',
   'Real billing data instead of demo numbers',
   'Email / SMS updates when a request changes',
+  'REST API framework linking Northwind Connect, CallCentre One, FieldForce and PeopleBase (B)',
+  'RAG pipeline grounded in real account data, where the AskNorthwind pilot failed (E)',
   'Assign requests and track SLAs (77% breached today)',
   'Store staffing data in Supabase, not a CSV upload',
 ]

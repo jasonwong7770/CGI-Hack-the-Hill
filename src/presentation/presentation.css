@@ -245,8 +245,47 @@ html.deck-mode body {
   letter-spacing: -0.035em;
 }
 
+/* Team credit under the lead: small avatar chips, each linking to GitHub */
+.hero-team {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 36px;
+  padding: 0;
+  list-style: none;
+}
+
+.hero-team a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 18px 6px 6px;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  background: var(--card-bg);
+  color: var(--fg);
+  font-size: 19px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: border-color 0.2s ease;
+}
+
+.hero-team a:hover,
+.hero-team a:focus-visible {
+  border-color: var(--accent);
+}
+
+.hero-team img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff;
+  object-fit: cover;
+}
+
 .hero-hint {
-  margin-top: 70px;
+  margin-top: 44px;
   color: var(--fg-soft);
   font-size: 20px;
   animation: deck-bob 2.4s ease-in-out infinite;
@@ -324,35 +363,6 @@ html.deck-mode body {
   color: var(--fg-soft);
   font-size: 21px;
   line-height: 1.5;
-}
-
-.team-card {
-  text-align: center;
-}
-
-.team-avatar {
-  display: block;
-  width: 150px;
-  height: 150px;
-  margin: 0 auto 22px;
-  border: 4px solid var(--accent);
-  border-radius: 50%;
-  background: #fff;
-  object-fit: cover;
-}
-
-.team-handle {
-  color: var(--accent);
-  font-size: 18px;
-  font-weight: 500;
-  text-decoration: none;
-  overflow-wrap: anywhere;
-}
-
-.team-handle:hover,
-.team-handle:focus-visible {
-  text-decoration: underline;
-  text-underline-offset: 4px;
 }
 
 .slide-source {
@@ -1072,4 +1082,170 @@ html.deck-mode body {
   .scn-pulse {
     display: none;
   }
+}
+
+/* ─── Data map (CSV → fix) ────────────────────────────────────────────────── */
+
+.data-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  vertical-align: middle;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.data-tag b {
+  display: inline-grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 7px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.data-tag span {
+  color: var(--fg-soft);
+}
+
+/* Findings: one card per CSV */
+.finding-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.deck .finding-card .stat {
+  margin: 6px 0 0;
+  font-size: 68px;
+}
+
+.deck-card.finding-card p {
+  font-size: 20px;
+  line-height: 1.45;
+}
+
+.deck-card.finding-card .finding-fix {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--card-border);
+  color: var(--fg);
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.finding-fix span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.data-legend-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  width: fit-content;
+  margin-top: 26px;
+  padding: 10px 18px;
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  /* Sits over the scenery, so it needs the card surface to stay readable */
+  background: var(--card-bg);
+}
+
+/* Dashboards: fixes per role, with status and source file */
+.board-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.board-card header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.board-card .role-badge {
+  width: 52px;
+  height: 52px;
+  margin: 0;
+  font-size: 20px;
+}
+
+.board-card h3 {
+  margin: 0;
+}
+
+.board-fixes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.board-fixes li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.board-fix-name {
+  flex: 1;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.board-fix-name small {
+  display: block;
+  color: var(--fg-soft);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.board-fixes .status {
+  padding: 3px 10px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.board-fixes .status.built {
+  background: var(--accent);
+  color: #fff;
+}
+
+.board-fixes .status.next {
+  color: var(--accent);
+}
+
+.deck-card .board-solves {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 18px;
+  color: var(--fg);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Feature cards cite their source file in the corner */
+.feature-card h3 .data-tag {
+  margin-left: 10px;
 }

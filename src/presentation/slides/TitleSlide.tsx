@@ -1,5 +1,17 @@
 import logo from '../../assets/logo.png'
+import alex from '../../assets/team/alex.png'
+import elias from '../../assets/team/elias.png'
+import ethan from '../../assets/team/ethan.png'
+import jason from '../../assets/team/jason.png'
 import Reveal from '../ui/Reveal'
+
+// Photos are each member's GitHub avatar
+const TEAM = [
+  { name: 'Alex Martinez', handle: 'AlexMtzRmz0212', photo: alex },
+  { name: 'Jason Wong', handle: 'jasonwong7770', photo: jason },
+  { name: 'Ethan Duong', handle: 'ethanduong2007', photo: ethan },
+  { name: 'Elias Kassar', handle: 'EliasKassarEducation', photo: elias },
+]
 
 export default function TitleSlide() {
   return (
@@ -21,6 +33,23 @@ export default function TitleSlide() {
         </p>
       </Reveal>
       <Reveal step={5}>
+        <ul className="hero-team" aria-label="Built by">
+          {TEAM.map((member) => (
+            <li key={member.handle}>
+              <a
+                href={`https://github.com/${member.handle}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={`@${member.handle}`}
+              >
+                <img src={member.photo} alt="" />
+                {member.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </Reveal>
+      <Reveal step={7}>
         <p className="hero-hint">
           Press <kbd>Space</kbd> to descend
         </p>

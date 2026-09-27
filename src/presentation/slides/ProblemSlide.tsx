@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react'
+import DataTag from '../ui/DataTag'
 import Reveal from '../ui/Reveal'
 import SlideLayout from '../ui/SlideLayout'
 import { BillingShareChart, DaysToCloseChart, TransferChart } from './ProblemCharts'
 
-// From the CGI challenge data: northwind_complaints.csv, northwind_monthly_kpis.csv, northwind_systems.csv
+// From the CGI challenge data: complaints (A), systems (B), monthly KPIs (C)
 const PAINS: { stat: string; text: string; chart: ReactNode }[] = [
   { stat: '4×', text: 'longer to close a complaint than two years ago', chart: <DaysToCloseChart /> },
   { stat: '35%', text: 'of complaints bounce between systems; those reopen 3× as often', chart: <TransferChart /> },
@@ -26,7 +27,8 @@ export default function ProblemSlide() {
       </div>
       <Reveal step={6}>
         <p className="slide-source">
-          Source: Northwind Utilities challenge data (1.8M customers), 25,416 complaints, Oct 2024 – Sep 2026
+          Source: Northwind Utilities challenge data (1.8M customers), 25,416 complaints, Oct 2024 – Sep 2026 · files{' '}
+          <DataTag file="A" /> <DataTag file="B" /> <DataTag file="C" />
         </p>
       </Reveal>
     </SlideLayout>
