@@ -138,3 +138,20 @@ grant update (role) on public.profiles to authenticated;
 -- update public.profiles
 -- set role = 'manager'
 -- where id = (select id from auth.users where email = 'manager@example.com');
+
+-- Complaint intake captures a category and (usually) a subcategory, chosen
+-- from a fixed taxonomy in the app (see COMPLAINT_CATEGORIES in src/types.ts).
+-- Both columns are null for maintenance requests.
+alter table public.requests add column if not exists complaint_category text;
+alter table public.requests add column if not exists complaint_subcategory text;
+
+alter table public.requests drop constraint if exists requests_complaint_category_check;
+alter table public.requests add constraint requests_complaint_category_check
+  check (complaint_category in ('billing', 'service', 'metering', 'supply', 'payment', 'water', 'other'));
+
+alter table public.requests drop constraint if exists requests_complaint_category_matches_category;
+alter table public.requests add constraint requests_complaint_category_matches_category
+  check (
+    (category = 'complaint' and complaint_category is not null)
+    or (category = 'maintenance' and complaint_category is null and complaint_subcategory is null)
+  );

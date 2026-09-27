@@ -11,10 +11,20 @@ import UserManagement from './UserManagement'
 import StaffingDashboard from './StaffingDashboard'
 import type { UserRole } from '../types'
 
+type CustomerTab = 'new-request' | 'bill' | 'calendar' | 'my-requests'
+
+const CUSTOMER_TABS: { value: CustomerTab; label: string }[] = [
+  { value: 'new-request', label: 'New request' },
+  { value: 'bill', label: 'Bill breakdown' },
+  { value: 'calendar', label: 'Appointments' },
+  { value: 'my-requests', label: 'My requests' },
+]
+
 export default function Dashboard({ session, role, onSignOut }: { session: Session; role: UserRole; onSignOut: () => void }) {
   const [requests, setRequests] = useState<MaintenanceRequest[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [customerTab, setCustomerTab] = useState<CustomerTab>('new-request')
 
   const fetchRequests = useCallback(async () => {
     setLoading(true)
@@ -55,10 +65,35 @@ export default function Dashboard({ session, role, onSignOut }: { session: Sessi
       {role === 'manager' && <StaffingDashboard />}
       {role === 'manager' && <ManagerStats requests={requests} />}
       {role === 'manager' && <UserManagement currentUserId={session.user.id} />}
-      {role === 'customer' && <RequestForm onSubmitted={fetchRequests} />}
-      {role === 'customer' && <BillBreakdown />}
-      {role === 'customer' && <Calendar />}
-      <RequestList requests={requests} loading={loading} error={error} role={role} onClose={closeRequest} />
+
+      {role === 'customer' && (
+        <>
+          <div className="tabs" role="tablist">
+            {CUSTOMER_TABS.map((t) => (
+              <button
+                key={t.value}
+                role="tab"
+                aria-selected={customerTab === t.value}
+                className={customerTab === t.value ? 'tab active' : 'tab'}
+                onClick={() => setCustomerTab(t.value)}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          {customerTab === 'new-request' && <RequestForm onSubmitted={fetchRequests} />}
+          {customerTab === 'bill' && <BillBreakdown />}
+          {customerTab === 'calendar' && <Calendar />}
+          {customerTab === 'my-requests' && (
+            <RequestList requests={requests} loading={loading} error={error} role={role} onClose={closeRequest} />
+          )}
+        </>
+      )}
+
+      {role !== 'customer' && (
+        <RequestList requests={requests} loading={loading} error={error} role={role} onClose={closeRequest} />
+      )}
     </div>
   )
 }
