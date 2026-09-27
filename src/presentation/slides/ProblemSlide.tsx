@@ -1,30 +1,34 @@
+import type { ReactNode } from 'react'
 import Reveal from '../ui/Reveal'
 import SlideLayout from '../ui/SlideLayout'
+import { BillingShareChart, DaysToCloseChart, TransferChart } from './ProblemCharts'
 
-// TODO: replace with real stats and sources
-const PAINS = [
-  { stat: '00%', text: 'of customers who call more than once about the same issue' },
-  { stat: '00 min', text: 'average wait on hold to report an outage or leak' },
-  { stat: '0 in 0', text: 'customers who don’t understand their monthly bill' },
+// From the CGI challenge data: northwind_complaints.csv, northwind_monthly_kpis.csv, northwind_systems.csv
+const PAINS: { stat: string; text: string; chart: ReactNode }[] = [
+  { stat: '4×', text: 'longer to close a complaint than two years ago', chart: <DaysToCloseChart /> },
+  { stat: '35%', text: 'of complaints bounce between systems; those reopen 3× as often', chart: <TransferChart /> },
+  { stat: '51%', text: 'of complaints are about billing, but the portal can’t break down a bill', chart: <BillingShareChart /> },
 ]
 
 export default function ProblemSlide() {
   return (
-    <SlideLayout
-      eyebrow="The problem"
-      title="Getting help from your utility shouldn’t take three phone calls"
-      lead="TODO: one or two sentences on why customers and staff struggle today."
-    >
+    <SlideLayout eyebrow="The problem" title="A complaint now takes 38 days to close">
       <div className="grid-3">
         {PAINS.map((pain, i) => (
-          <Reveal key={pain.text} step={3 + i}>
-            <article className="deck-card stat-card">
+          <Reveal key={pain.stat} step={3 + i}>
+            <article className="deck-card stat-card problem-card">
               <strong className="stat">{pain.stat}</strong>
               <p>{pain.text}</p>
+              {pain.chart}
             </article>
           </Reveal>
         ))}
       </div>
+      <Reveal step={6}>
+        <p className="slide-source">
+          Source: Northwind Utilities challenge data (1.8M customers), 25,416 complaints, Oct 2024 – Sep 2026
+        </p>
+      </Reveal>
     </SlideLayout>
   )
 }

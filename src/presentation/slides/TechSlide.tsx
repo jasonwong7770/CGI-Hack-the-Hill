@@ -2,9 +2,9 @@ import Reveal from '../ui/Reveal'
 import SlideLayout from '../ui/SlideLayout'
 
 const NODES = [
-  { title: 'React 19 + Vite', text: 'Landing page, auth screens and role-based dashboards' },
-  { title: 'Supabase Auth', text: 'Email and password sign-in, one profile per user' },
-  { title: 'Postgres + RLS', text: 'Row-level security policies enforce each role in the database' },
+  { title: 'React 19 + Vite', text: 'TypeScript front end: landing page, role-based dashboards and this deck' },
+  { title: 'Supabase Auth', text: 'Email sign-in; a database trigger creates every new account as a customer' },
+  { title: 'Postgres + RLS', text: 'Row-level security enforces each role; staff can only change a request’s status' },
 ]
 
 function Arrow() {
@@ -26,8 +26,8 @@ export default function TechSlide() {
   return (
     <SlideLayout
       eyebrow="Under the hood"
-      title="Security lives in the database, not the UI"
-      lead="TODO: one line on why this architecture was the right call for a weekend build."
+      title="Security lives in the database."
+      lead="Supabase gave us auth and Postgres out of the box, so the weekend went into features, and every role rule is enforced by the database itself."
     >
       <div className="arch">
         {NODES.map((node, i) => (

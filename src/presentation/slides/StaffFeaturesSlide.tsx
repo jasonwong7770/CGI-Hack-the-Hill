@@ -1,18 +1,18 @@
-import Placeholder from '../ui/Placeholder'
+import AppScreen from '../ui/AppScreen'
 import Reveal from '../ui/Reveal'
 import SlideLayout from '../ui/SlideLayout'
 
-// TODO: swap placeholders for screenshots of the staff dashboard
+// Each screen is the real component rendered with sample data (see screens/ScreenPreview.tsx)
 const FEATURES = [
   {
     title: 'Employees: one shared queue',
-    text: 'Every customer request in one list, closed with a click.',
-    shot: 'Screenshot: employee request queue',
+    text: 'Every customer request in one list, closed with a click, instead of four systems per call.',
+    screen: 'queue',
   },
   {
-    title: 'Managers: stats and access',
-    text: 'Totals by status and type, plus role management for the whole team.',
-    shot: 'Screenshot: manager stats + user management',
+    title: 'Managers: staffing, stats and access',
+    text: 'Vacancies, attrition and complaints per agent by region, plus request totals and role management.',
+    screen: 'staffing',
   },
 ]
 
@@ -23,7 +23,12 @@ export default function StaffFeaturesSlide() {
         {FEATURES.map((feature, i) => (
           <Reveal key={feature.title} step={3 + i}>
             <article className="deck-card feature-card">
-              <Placeholder label={feature.shot} className="feature-shot tall" />
+              <AppScreen
+                src={`/presentation/screen/${feature.screen}`}
+                title={feature.title}
+                viewportWidth={960}
+                className="feature-shot tall"
+              />
               <h3>{feature.title}</h3>
               <p>{feature.text}</p>
             </article>

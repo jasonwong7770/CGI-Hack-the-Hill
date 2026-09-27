@@ -83,6 +83,10 @@ html.deck-mode body {
   --card-bg: #ffffffc4;
   --card-border: #173f5820;
   --card-shadow: 0 18px 40px #173f5818;
+  /* Charts: context marks, hairlines, and the card surface (for the ring around dots) */
+  --chart-muted: #8da2b0;
+  --chart-grid: #173f5824;
+  --chart-surface: #eff8fc;
 }
 
 .deck-slide.tone-light {
@@ -92,6 +96,9 @@ html.deck-mode body {
   --card-bg: #0c1f2dc2;
   --card-border: #f7efe01f;
   --card-shadow: 0 18px 40px #0000004d;
+  --chart-muted: #6f8290;
+  --chart-grid: #f7efe024;
+  --chart-surface: #22292e;
 }
 
 /* ─── Reveal-on-arrival ───────────────────────────────────────────────────── */
@@ -143,6 +150,7 @@ html.deck-mode body {
   font-weight: 800;
   line-height: 1.02;
   letter-spacing: -0.025em;
+  text-wrap: balance;
 }
 
 .deck .slide-lead {
@@ -250,6 +258,16 @@ html.deck-mode body {
   font-size: 22px;
 }
 
+.hero-links a {
+  color: inherit;
+  text-underline-offset: 5px;
+}
+
+.hero-links a:hover,
+.hero-links a:focus-visible {
+  color: var(--accent);
+}
+
 @keyframes deck-bob {
   50% {
     transform: translateY(8px);
@@ -313,17 +331,34 @@ html.deck-mode body {
 }
 
 .team-avatar {
-  display: grid;
+  display: block;
   width: 150px;
   height: 150px;
   margin: 0 auto 22px;
-  place-items: center;
-  border: 3px dashed var(--accent);
+  border: 4px solid var(--accent);
   border-radius: 50%;
+  background: #fff;
+  object-fit: cover;
+}
+
+.team-handle {
   color: var(--accent);
-  font-family: var(--display);
-  font-size: 56px;
-  font-weight: 800;
+  font-size: 18px;
+  font-weight: 500;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.team-handle:hover,
+.team-handle:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.slide-source {
+  margin-top: 22px;
+  color: var(--fg-soft);
+  font-size: 16px;
 }
 
 .stat-card .stat {
@@ -334,6 +369,152 @@ html.deck-mode body {
   font-size: 76px;
   font-weight: 800;
   line-height: 1;
+}
+
+/* ─── Problem charts ──────────────────────────────────────────────────────── */
+
+.problem-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.deck-card.problem-card p {
+  font-size: 19px;
+  line-height: 1.45;
+}
+
+/* Charts sit at the bottom of each card so the three line up */
+.problem-chart {
+  margin: auto 0 0;
+  padding-top: 20px;
+}
+
+.problem-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.chart-label {
+  margin-bottom: 10px;
+  color: var(--fg-soft);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.chart-label-svg {
+  fill: var(--fg-soft);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.chart-tick {
+  fill: var(--fg-soft);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-value {
+  fill: var(--fg);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.chart-grid {
+  stroke: var(--chart-grid);
+  stroke-width: 1;
+}
+
+.chart-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chart-area {
+  fill: var(--accent);
+  opacity: 0.1;
+}
+
+.chart-dot {
+  fill: var(--accent);
+  stroke: var(--chart-surface);
+  stroke-width: 2;
+}
+
+.chart-bar {
+  fill: var(--accent);
+  transition: filter 0.15s ease;
+}
+
+.chart-dot.is-muted,
+.chart-bar.is-muted {
+  fill: var(--chart-muted);
+}
+
+.chart-bar.is-track {
+  fill: color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+.chart-bar:hover {
+  filter: brightness(1.12);
+}
+
+.chart-hit {
+  fill: transparent;
+}
+
+.chart-hit:hover {
+  fill: color-mix(in srgb, var(--fg) 7%, transparent);
+}
+
+/* Bars grow and the line draws in just after their card arrives */
+.deck-slide.is-reached .chart-grow {
+  transform-box: fill-box;
+  transform-origin: 0 50%;
+  animation: chart-grow 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.deck-slide.is-reached .chart-draw {
+  stroke-dasharray: 1;
+  animation: chart-draw 1.3s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.deck-slide.is-reached .chart-draw-fade {
+  animation: chart-fade 1.3s ease both;
+}
+
+/* After the shorthands above, which would otherwise reset it */
+.deck-slide.is-reached :is(.chart-grow, .chart-draw, .chart-draw-fade) {
+  animation-delay: calc(var(--deck-dur) * 0.45 + var(--reveal-delay, 0ms) + 350ms);
+}
+
+@keyframes chart-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes chart-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes chart-fade {
+  from {
+    opacity: 0;
+  }
 }
 
 .role-badge {
@@ -388,21 +569,32 @@ html.deck-mode body {
   color: var(--accent);
 }
 
-/* ─── Placeholder & browser frame ─────────────────────────────────────────── */
+/* ─── Live app screens & browser frame ────────────────────────────────────── */
 
-.placeholder {
-  display: grid;
-  width: 100%;
-  height: 100%;
-  min-height: 120px;
-  place-items: center;
-  padding: 20px;
-  border: 3px dashed color-mix(in srgb, var(--fg) 35%, transparent);
-  border-radius: 16px;
-  background: color-mix(in srgb, var(--fg) 6%, transparent);
-  color: var(--fg-soft);
-  font-size: 19px;
-  text-align: center;
+.app-screen {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--fg) 18%, transparent);
+  border-radius: 14px;
+  background: #f4f6f7;
+}
+
+/* Sized and scaled inline by AppScreen; never interactive */
+.app-screen iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  border: 0;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.browser-body > .app-screen {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  border-radius: 0;
 }
 
 .browser-frame {
@@ -510,25 +702,20 @@ html.deck-mode body {
   pointer-events: none;
 }
 
-.demo-frame iframe.is-live {
-  pointer-events: auto;
-}
-
 .deck .demo-overlay {
   position: absolute;
   inset: 0;
   display: grid;
-  width: 100%;
-  padding: 0;
   place-items: center;
-  border-radius: 0;
   background: #0c1f2d00;
   color: transparent;
   font-size: 26px;
+  text-decoration: none;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
-.deck .demo-overlay:hover:not(:disabled) {
+.deck .demo-overlay:hover,
+.deck .demo-overlay:focus-visible {
   background: #0c1f2d73;
   color: #fff;
 }
@@ -537,21 +724,6 @@ html.deck-mode body {
   padding: 14px 26px;
   border: 2px solid currentColor;
   border-radius: 999px;
-}
-
-.deck .demo-exit {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 20px;
-  border-radius: 999px;
-  background: var(--gold-light);
-  color: #0c1f2d;
-  font-size: 20px;
-}
-
-.deck .demo-exit:hover:not(:disabled) {
-  background: #f0cf87;
 }
 
 /* ─── Controls (bottom-left) ──────────────────────────────────────────────── */
@@ -879,6 +1051,11 @@ html.deck-mode body {
   .deck-slide.is-reached .reveal {
     opacity: 1;
     animation: none;
+  }
+
+  .deck-slide.is-reached :is(.chart-grow, .chart-draw, .chart-draw-fade) {
+    animation: none;
+    stroke-dasharray: none;
   }
 
   .hero-hint,

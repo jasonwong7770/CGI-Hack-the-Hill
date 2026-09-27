@@ -15,8 +15,15 @@ export default function ThanksSlide() {
         <p className="slide-lead">Questions?</p>
       </Reveal>
       <Reveal step={3}>
-        {/* TODO: repo link, Devpost link, team handles */}
-        <p className="hero-links">github.com/your-team/your-repo · devpost.com/software/your-project</p>
+        <p className="hero-links">
+          <a href="https://github.com/jasonwong7770/CGI-Hack-the-Hill" target="_blank" rel="noopener noreferrer">
+            github.com/jasonwong7770/CGI-Hack-the-Hill
+          </a>
+          {' · '}
+          <a href="https://hack-the-hill-iii.devpost.com/" target="_blank" rel="noopener noreferrer">
+            hack-the-hill-iii.devpost.com
+          </a>
+        </p>
       </Reveal>
     </div>
   )

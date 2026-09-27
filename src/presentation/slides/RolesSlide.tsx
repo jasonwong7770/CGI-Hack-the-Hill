@@ -15,12 +15,17 @@ const ROLES = [
   {
     badge: 'E',
     name: 'Employee',
-    can: ['See every customer request', 'Triage and close requests'],
+    can: ['See every customer request', 'Close requests with one click'],
   },
   {
     badge: 'M',
     name: 'Manager',
-    can: ['Everything an employee can do', 'Overview stats at a glance', 'Change other users’ roles'],
+    can: [
+      'Everything an employee can do',
+      'Overview stats at a glance',
+      'Staffing trends by region',
+      'Change other users’ roles',
+    ],
   },
 ]
 

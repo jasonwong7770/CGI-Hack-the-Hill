@@ -16,7 +16,6 @@ export default function TitleSlide() {
         </h1>
       </Reveal>
       <Reveal step={3}>
-        {/* TODO: final tagline */}
         <p className="slide-lead">
           One portal for every energy and water request, from the first call to the closed ticket.
         </p>

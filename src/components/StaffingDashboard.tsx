@@ -104,9 +104,10 @@ function formatDelta(current: number, previous: number | undefined, metric: Metr
   return `${sign}${integer.format(change)} vs previous month`
 }
 
-export default function StaffingDashboard() {
-  const [rows, setRows] = useState<StaffingRow[]>([])
-  const [fileName, setFileName] = useState('')
+// initialData preloads a CSV (used by the pitch deck's live screens); the app itself starts empty
+export default function StaffingDashboard({ initialData }: { initialData?: { fileName: string; csv: string } }) {
+  const [rows, setRows] = useState<StaffingRow[]>(() => initialData ? mapStaffingCsv(initialData.csv) : [])
+  const [fileName, setFileName] = useState(initialData?.fileName ?? '')
   const [error, setError] = useState<string | null>(null)
   const [monthFilter, setMonthFilter] = useState('')
   const [regionFilter, setRegionFilter] = useState('All regions')

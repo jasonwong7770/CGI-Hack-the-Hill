@@ -23,7 +23,14 @@ function Chevron({ direction }: { direction: 'up' | 'down' }) {
 export default function Controls({ index, total, onPrev, onNext }: Props) {
   return (
     <nav className="deck-controls" aria-label="Slide controls">
-      <a href="/" className="deck-btn deck-home" aria-label="Back to home" title="Back to home">
+      <a
+        href="/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="deck-btn deck-home"
+        aria-label="Open the app in a new tab"
+        title="Open the app in a new tab"
+      >
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
           <path
             className="deck-home-roof"

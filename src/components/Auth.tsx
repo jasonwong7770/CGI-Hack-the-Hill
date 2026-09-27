@@ -10,11 +10,13 @@ const EMPLOYEE_TEST_EMAIL = 'support@northwind.ca'
 const EMPLOYEE_TEST_PASSWORD = '12345678'
 const MANAGER_TEST_EMAIL = 'manager@northwind.ca'
 const MANAGER_TEST_PASSWORD = '12345678'
+const CUSTOMER_TEST_EMAIL = 'alejandro.martinez.rmz97@gmail.com'
+const CUSTOMER_TEST_PASSWORD = '123456789'
 
 export default function Auth({ role, onBack }: { role: UserRole; onBack: () => void }) {
   const [mode, setMode] = useState<Mode>('login')
-  const [email, setEmail] = useState(role === 'manager' ? MANAGER_TEST_EMAIL : role === 'employee' ? EMPLOYEE_TEST_EMAIL : '')
-  const [password, setPassword] = useState(role === 'manager' ? MANAGER_TEST_PASSWORD : role === 'employee' ? EMPLOYEE_TEST_PASSWORD : '')
+  const [email, setEmail] = useState(role === 'manager' ? MANAGER_TEST_EMAIL : role === 'employee' ? EMPLOYEE_TEST_EMAIL : CUSTOMER_TEST_EMAIL)
+  const [password, setPassword] = useState(role === 'manager' ? MANAGER_TEST_PASSWORD : role === 'employee' ? EMPLOYEE_TEST_PASSWORD : CUSTOMER_TEST_PASSWORD)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [info, setInfo] = useState<string | null>(null)
