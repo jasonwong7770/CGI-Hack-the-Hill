@@ -5,6 +5,7 @@ import DataMapSlide from './slides/DataMapSlide'
 import DemoSlide from './slides/DemoSlide'
 import ImpactSlide from './slides/ImpactSlide'
 import ProblemSlide from './slides/ProblemSlide'
+import Next12MonthsSlide from './slides/Next12MonthsSlide'
 import RolesSlide from './slides/RolesSlide'
 import SolutionSlide from './slides/SolutionSlide'
 import StaffFeaturesSlide from './slides/StaffFeaturesSlide'
@@ -28,7 +29,7 @@ export const slides: SlideDef[] = [
     zone: 'powerlines',
     Component: ProblemSlide,
     notes:
-      'Context: 1.8M customers, complaints up 37%, first-contact resolution 62%→41%, regulator score 4.3→2.6/5. Then walk the charts: 9→38 days; transfers cost $121 vs $68 and reopen 3×; half are billing. ~40s',
+      'Context: 1.8M customers, complaints up 37%, first-contact resolution 62%→41%, regulator score 4.3→2.6/5. Then walk the charts: 9→43.8 days; transfers cost $121 vs $68 and reopen 3×; half are billing. ~40s',
   },
   {
     id: 'findings',
@@ -84,5 +85,12 @@ export const slides: SlideDef[] = [
     Component: ImpactSlide,
     notes: '~$235K/yr is an estimate: transfers × $53 extra each. Then the roadmap. ~25s',
   },
-  { id: 'thanks', title: 'Thank you', zone: 'reservoir', Component: ThanksSlide, notes: 'Thank the judges, open for questions.' },
+  {
+    id: 'next-12-months',
+    title: 'The Next 12 Months',
+    zone: 'reservoir',
+    Component: Next12MonthsSlide,
+    notes: 'Introduce the next twelve-month roadmap.',
+  },
+  { id: 'thanks', title: 'Thank you', zone: 'reservoir', Component: ThanksSlide, notes: 'Thank the judges and share the project links.' },
 ]
