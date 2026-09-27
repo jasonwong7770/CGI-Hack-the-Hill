@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import meterReadsCsv from '../../csv/northwind_meter_reads.csv?raw'
 
 type StaffingRow = {
   month: string
@@ -8,6 +9,14 @@ type StaffingRow = {
   attritionRate: number
   complaintsPerAgent: number
   note: string
+}
+
+type MeterReadRow = {
+  month: string
+  region: string
+  accounts: number
+  estimatedReadRate: number
+  smartMeterPenetration: number
 }
 
 const requiredColumns = [
@@ -82,6 +91,19 @@ function mapStaffingCsv(text: string): StaffingRow[] {
   })
 }
 
+function mapMeterReadCsv(text: string): MeterReadRow[] {
+  const [headers, ...dataRows] = parseCsv(text)
+  if (!headers) return []
+  const index = (name: string) => headers.indexOf(name)
+  return dataRows.map((cells) => ({
+    month: cells[index('month')],
+    region: cells[index('region')],
+    accounts: Number(cells[index('accounts')]),
+    estimatedReadRate: Number(cells[index('estimated_read_rate')]),
+    smartMeterPenetration: Number(cells[index('smart_meter_penetration')]),
+  })).filter((row) => row.month && row.region && Number.isFinite(row.accounts) && Number.isFinite(row.estimatedReadRate) && Number.isFinite(row.smartMeterPenetration))
+}
+
 const integer = new Intl.NumberFormat()
 const percent = (value: number) => `${(value * 100).toFixed(1)}%`
 const chartColors = ['#1c5878', '#c27c37', '#52856f', '#9b5c86', '#7b7c42', '#438d99']
@@ -102,6 +124,54 @@ function formatDelta(current: number, previous: number | undefined, metric: Metr
   if (metric === 'attrition') return `${sign}${(change * 100).toFixed(1)} percentage points vs previous month`
   if (metric === 'complaints') return `${sign}${change.toFixed(1)} vs previous month`
   return `${sign}${integer.format(change)} vs previous month`
+}
+
+const meterReadRows = mapMeterReadCsv(meterReadsCsv)
+
+function MeterReadInsight({ month, selectedRegion }: { month: string; selectedRegion: string }) {
+  const rows = meterReadRows.filter((row) => row.month === month).sort((a, b) => a.region.localeCompare(b.region))
+  const lacking = rows.filter((row) => row.smartMeterPenetration === 0)
+  const covered = rows.filter((row) => row.smartMeterPenetration > 0)
+  const weightedReadRate = (group: MeterReadRow[]) => {
+    const accountTotal = group.reduce((sum, row) => sum + row.accounts, 0)
+    return accountTotal ? group.reduce((sum, row) => sum + row.estimatedReadRate * row.accounts, 0) / accountTotal : undefined
+  }
+  const lackingRate = weightedReadRate(lacking)
+  const coveredRate = weightedReadRate(covered)
+
+  return (
+    <section className="meter-insight" aria-labelledby="meter-insight-title">
+      <div className="meter-insight-heading"><div><p className="meter-eyebrow">METERING</p><h3 id="meter-insight-title">Smart-meter coverage and estimated reads</h3><p className="muted">Account-weighted regional comparison · {month}</p></div></div>
+      {rows.length === 0 ? <p className="muted">No meter-read data is available for this month.</p> : <>
+        <div className="meter-rate-comparison">
+          {lackingRate !== undefined && <article className="meter-cohort-card no-meter-cohort">
+            <div className="meter-cohort-heading"><strong>No smart-meter coverage</strong><span className="meter-cohort-count">0% · {lacking.length} regions</span></div>
+            <strong className="meter-rate-value">{percent(lackingRate)}</strong>
+            <div className="meter-rate-track" role="img" aria-label={`${percent(lackingRate)} estimated-read rate`}><span style={{ width: `${Math.max(0, Math.min(100, lackingRate * 100))}%` }} /></div>
+            <span className="meter-rate-label">Estimated-read rate</span>
+            <p className="meter-region-names">{lacking.map((row) => row.region).join(' · ')}</p>
+          </article>}
+          {coveredRate !== undefined && <article className="meter-cohort-card covered-meter-cohort">
+            <div className="meter-cohort-heading"><strong>Some smart-meter coverage</strong><span className="meter-cohort-count">{covered.length} regions</span></div>
+            <strong className="meter-rate-value">{percent(coveredRate)}</strong>
+            <div className="meter-rate-track" role="img" aria-label={`${percent(coveredRate)} estimated-read rate`}><span style={{ width: `${Math.max(0, Math.min(100, coveredRate * 100))}%` }} /></div>
+            <span className="meter-rate-label">Estimated-read rate</span>
+            <p className="meter-region-names">{covered.map((row) => row.region).join(' · ')}</p>
+          </article>}
+        </div>
+        <div className="staffing-table-wrap">
+          <table className="staffing-table meter-region-table">
+            <thead><tr><th>Region</th><th>Smart meter coverage</th><th>Estimated-read rate</th><th>Accounts</th></tr></thead>
+            <tbody>{rows.map((row) => <tr key={row.region} className={`${row.smartMeterPenetration === 0 ? 'no-smart-meters ' : ''}${selectedRegion === row.region ? 'focused-region' : ''}`}>
+              <th scope="row">{row.region}{row.smartMeterPenetration === 0 && <span className="meter-coverage-tag">No smart meters</span>}</th>
+              <td>{percent(row.smartMeterPenetration)}</td><td>{percent(row.estimatedReadRate)}</td><td>{integer.format(row.accounts)}</td>
+            </tr>)}</tbody>
+          </table>
+        </div>
+        <p className="muted meter-insight-footnote">Rates are weighted by account count. This is an observed regional association; other regional differences may also affect estimated reads.</p>
+      </>}
+    </section>
+  )
 }
 
 // initialData preloads a CSV (used by the pitch deck's live screens); the app itself starts empty
@@ -199,6 +269,7 @@ export default function StaffingDashboard({ initialData }: { initialData?: { fil
           <div className="stat-tile" key={`${selectedMonth}-${regionFilter}-attrition`}><span className="stat-value">{percent(summary.attrition)}</span><span className="stat-label">12 month attrition</span><span className="stat-change">{formatDelta(summary.attrition, previousSummary?.attrition, 'attrition')}</span></div>
           <div className="stat-tile" key={`${selectedMonth}-${regionFilter}-complaints`}><span className="stat-value">{summary.complaints.toFixed(1)}</span><span className="stat-label">Complaints per agent</span><span className="stat-change">{formatDelta(summary.complaints, previousSummary?.complaints, 'complaints')}</span></div>
         </div>
+        <MeterReadInsight month={selectedMonth} selectedRegion={regionFilter} />
         <div className="staffing-trend">
           <div className="staffing-trend-heading">
             <div><h3>{chartMetric === 'agents' ? 'Agent FTE by region' : 'Monthly trend by region'}</h3><span className="muted">Monthly changes over time · Select a point to view that month</span></div>
