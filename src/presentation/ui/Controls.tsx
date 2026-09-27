@@ -23,6 +23,26 @@ function Chevron({ direction }: { direction: 'up' | 'down' }) {
 export default function Controls({ index, total, onPrev, onNext }: Props) {
   return (
     <nav className="deck-controls" aria-label="Slide controls">
+      <a href="/" className="deck-btn deck-home" aria-label="Back to home" title="Back to home">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+          <path
+            className="deck-home-roof"
+            d="M4 11.5 12 4l8 7.5"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            className="deck-home-body"
+            d="M6 10v9h12v-9"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </a>
       <button
         type="button"
         className="deck-btn"

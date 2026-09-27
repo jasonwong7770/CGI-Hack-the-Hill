@@ -90,7 +90,23 @@ export default function App() {
           </div>
           <header className="welcome-topbar">
             <img className="welcome-logo" src={northwindLogo} alt="Northwind Utilities" />
-            <button onClick={() => setShowRolePicker(true)}>Log in</button>
+            <div className="welcome-topbar-actions">
+              <a
+                className="presentation-link"
+                href="/presentation"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="View presentation"
+                title="View presentation"
+              >
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
+                  <rect className="presentation-link-screen" x="2.5" y="4" width="19" height="13" rx="2" stroke="currentColor" strokeWidth="1.6" />
+                  <path className="presentation-link-stand" d="M9 21h6M12 17v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                  <path className="presentation-link-play" d="M10 8.3v5.4l4.6-2.7L10 8.3Z" fill="currentColor" />
+                </svg>
+              </a>
+              <button onClick={() => setShowRolePicker(true)}>Log in</button>
+            </div>
           </header>
           <nav className="welcome-subbar" aria-label="Welcome page sections">
             <a href="#about">About</a>

@@ -591,6 +591,31 @@ html.deck-mode body {
   cursor: default;
 }
 
+.deck .deck-home {
+  margin-bottom: 2px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #ffffff24;
+}
+
+.deck-home-roof {
+  transform-origin: 12px 8px;
+  transition: transform 0.2s ease;
+}
+
+.deck-home-body {
+  transition: transform 0.2s ease;
+}
+
+.deck .deck-home:hover .deck-home-roof,
+.deck .deck-home:focus-visible .deck-home-roof {
+  transform: translateY(-1.5px) scale(1.08);
+}
+
+.deck .deck-home:hover .deck-home-body,
+.deck .deck-home:focus-visible .deck-home-body {
+  transform: translateY(1px);
+}
+
 .deck-counter {
   padding: 2px 0 4px;
   font-size: 12px;

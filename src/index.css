@@ -66,6 +66,14 @@ html { scroll-behavior: smooth; }
 .welcome-logo { display: block; width: 68px; height: 68px; object-fit: contain; }
 .welcome-photo .welcome-topbar > button { background: #fff; color: #173f58; box-shadow: 0 2px 10px #10263830; }
 .welcome-photo .welcome-topbar > button:hover:not(:disabled) { background: #f0f0f0; }
+.welcome-topbar-actions { display: flex; align-items: center; gap: 12px; }
+.presentation-link { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; color: #fff; background: #ffffff1c; border: 1px solid #ffffff35; transition: background .2s ease, border-color .2s ease, transform .2s ease; }
+.presentation-link svg { overflow: visible; }
+.presentation-link-play { transform-origin: 11px 11px; transition: transform .2s ease; }
+.presentation-link-screen { transition: stroke .2s ease; }
+.presentation-link:hover, .presentation-link:focus-visible { background: #ffffff30; border-color: #ffffff5a; transform: translateY(-2px); }
+.presentation-link:hover .presentation-link-play, .presentation-link:focus-visible .presentation-link-play { transform: scale(1.15); }
+.presentation-link:active { transform: translateY(0); }
 .welcome-subbar { position: absolute; z-index: 3; top: 76px; left: 0; width: 100%; min-height: 48px; display: flex; justify-content: space-between; align-items: center; padding: 0 24px; background: #24627feF; border-bottom: 1px solid #ffffff35; backdrop-filter: blur(8px); }
 .welcome-subbar a { flex: 1; color: #fff; font-size: clamp(.8rem, 1.25vw, 1rem); font-weight: 600; text-align: center; text-decoration: none; white-space: nowrap; }
 .welcome-subbar a:hover { text-decoration: underline; text-underline-offset: 4px; }
