@@ -12,9 +12,6 @@ export default function ThanksSlide() {
         </h2>
       </Reveal>
       <Reveal step={2}>
-        <p className="slide-lead">Questions?</p>
-      </Reveal>
-      <Reveal step={3}>
         <p className="hero-links">
           <a href="https://github.com/jasonwong7770/CGI-Hack-the-Hill" target="_blank" rel="noopener noreferrer">
             github.com/jasonwong7770/CGI-Hack-the-Hill

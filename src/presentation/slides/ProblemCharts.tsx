@@ -21,7 +21,7 @@ function ChartTable({ caption, rows }: { caption: string; rows: [string, string]
   )
 }
 
-// ─── 4×: average days to close, Oct 2024 → Sep 2026 ─────────────────────────
+// ─── 5×: average days to close, Oct 2024 → Sep 2026 ─────────────────────────
 
 const MONTHS = [
   'Oct 2024', 'Nov 2024', 'Dec 2024', 'Jan 2025', 'Feb 2025', 'Mar 2025', 'Apr 2025', 'May 2025',
@@ -41,7 +41,7 @@ export function DaysToCloseChart() {
   const bottom = 26
   const plotW = W - left - right
   const plotH = H - top - bottom
-  const max = 40
+  const max = 50
   const x = (i: number) => left + (i / (DAYS_TO_CLOSE.length - 1)) * plotW
   const y = (v: number) => top + (1 - v / max) * plotH
   const points = DAYS_TO_CLOSE.map((v, i) => `${x(i)},${y(v)}`)
@@ -54,7 +54,7 @@ export function DaysToCloseChart() {
     <figure className="problem-chart">
       <figcaption className="chart-label">Average days to close a complaint</figcaption>
       <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
-        {[0, 20, 40].map((tick) => (
+        {[0, 25, 50].map((tick) => (
           <g key={tick}>
             <line className="chart-grid" x1={left} x2={W - right} y1={y(tick)} y2={y(tick)} />
             <text className="chart-tick" x={left - 8} y={y(tick) + 5} textAnchor="end">
