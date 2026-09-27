@@ -20,6 +20,13 @@ const CUSTOMER_TABS: { value: CustomerTab; label: string }[] = [
   { value: 'my-requests', label: 'My requests' },
 ]
 
+const CUSTOMER_TAB_TITLES: Record<CustomerTab, string> = {
+  'new-request': 'New Request',
+  bill: 'Bill Breakdown',
+  calendar: 'Appointments',
+  'my-requests': 'My Requests',
+}
+
 export default function Dashboard({ session, role, onSignOut }: { session: Session; role: UserRole; onSignOut: () => void }) {
   const [requests, setRequests] = useState<MaintenanceRequest[]>([])
   const [loading, setLoading] = useState(true)
@@ -50,6 +57,11 @@ export default function Dashboard({ session, role, onSignOut }: { session: Sessi
   useEffect(() => {
     fetchRequests()
   }, [fetchRequests])
+
+  useEffect(() => {
+    const roleLabel = role === 'manager' ? 'Manager Dashboard' : role === 'employee' ? 'Employee Workspace' : CUSTOMER_TAB_TITLES[customerTab]
+    document.title = `${roleLabel} – Northwind Utilities`
+  }, [role, customerTab])
 
   return (
     <div className="dashboard">

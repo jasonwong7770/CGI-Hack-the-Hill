@@ -62,6 +62,15 @@ export default function App() {
     setAuthRole(null)
   }
 
+  useEffect(() => {
+    if (session) return
+    if (authRole) {
+      document.title = `Sign In (${authRole === 'manager' ? 'Manager' : authRole === 'employee' ? 'Employee' : 'Customer'}) – Northwind Utilities`
+    } else {
+      document.title = 'Northwind Utilities'
+    }
+  }, [session, authRole])
+
   return (
     <div className={`app${!session && !authRole ? ' app-welcome' : ''}`}>
       {!isSupabaseConfigured && (
