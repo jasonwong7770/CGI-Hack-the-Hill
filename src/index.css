@@ -220,9 +220,36 @@ button.link:hover:not(:disabled) { background: none; text-decoration: underline;
 .requests p { margin: 8px 0 0; white-space: pre-wrap; word-break: break-word; }
 .request-customer { font-size: .8rem; color: var(--muted); }
 .request-customer code { overflow-wrap: anywhere; }
+.customer-id-link { max-width: 100%; margin-left: 3px; text-align: left; vertical-align: baseline; }
+.customer-id-link code { overflow-wrap: anywhere; }
 .close-request { margin-top: 12px; padding: 7px 12px; font-size: .82rem; background: var(--primary); }
 .close-request:hover:not(:disabled) { background: var(--primary-hover); }
 .request-meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 0.8rem; }
+
+.employee-requests-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 340px); align-items: start; gap: 16px; }
+.employee-requests-layout > .card { min-width: 0; }
+.customer-profile-panel { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; margin-bottom: 20px; padding: 20px; }
+.customer-profile-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.customer-profile-heading h2 { margin: 0; font-size: 1.15rem; }
+.customer-profile-eyebrow { margin: 0 0 5px; color: var(--water); font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.customer-profile-close { flex: none; padding: 5px 9px; font-size: .76rem; }
+.customer-demo-note { margin: 12px 0; color: var(--muted); font-size: .76rem; }
+.customer-profile-empty { margin: 18px 0 4px; font-size: .9rem; line-height: 1.5; }
+.customer-profile-id { display: block; overflow-wrap: anywhere; margin-bottom: 14px; color: var(--muted); font-size: .68rem; }
+.customer-profile-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 10px; margin: 0; }
+.customer-profile-fields div { min-width: 0; }
+.customer-profile-fields dt { margin-bottom: 3px; color: var(--muted); font-size: .7rem; }
+.customer-profile-fields dd { margin: 0; color: var(--text); font-size: .8rem; font-weight: 600; overflow-wrap: anywhere; }
+.customer-history-heading { display: flex; align-items: center; gap: 8px; margin: 20px 0 10px; padding-top: 14px; border-top: 1px solid var(--border); }
+.customer-history-heading h3 { margin: 0; font-size: .95rem; }
+.customer-request-history { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.customer-request-history li { min-width: 0; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); }
+.customer-history-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; }
+.customer-request-history time { display: block; margin-top: 7px; color: var(--muted); font-size: .72rem; }
+.customer-request-history li p { margin: 6px 0 0; font-size: .8rem; }
+.customer-history-status { color: var(--muted); font-size: .72rem; font-weight: 650; text-transform: capitalize; }
+.customer-history-status.status-open { color: var(--success); }
+.customer-history-status.status-closed { color: var(--muted); }
 
 .pill {
   text-transform: capitalize;
@@ -265,6 +292,10 @@ button.link:hover:not(:disabled) { background: none; text-decoration: underline;
 .meter-coverage-tag { display: inline-block; margin-left: 8px; border: 1px solid var(--border); border-radius: 999px; padding: 3px 8px; background: var(--surface-hover); color: var(--text); font-size: .68rem; font-weight: 650; white-space: nowrap; }
 .meter-insight-footnote { margin: 12px 0 0; font-size: .72rem; line-height: 1.45; }
 @media (max-width: 600px) { .meter-rate-comparison { grid-template-columns: 1fr; } .meter-cohort-card { min-height: 170px; } }
+@media (max-width: 800px) {
+  .employee-requests-layout { grid-template-columns: minmax(0, 1fr); }
+  .customer-profile-panel { position: static; max-height: none; }
+}
 
 .staffing-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
 .staffing-heading h2 { margin-top: 0; }
