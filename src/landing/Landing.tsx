@@ -7,7 +7,7 @@ import type { UserRole } from '../types'
 import './landing.css'
 
 const REPO_URL = 'https://github.com/jasonwong7770/CGI-Hack-the-Hill'
-const DEVPOST_URL = 'https://hack-the-hill-iii.devpost.com/'
+const DEVPOST_URL = 'https://devpost.com/software/fixtheflow'
 
 // Figures from the CGI challenge data, the same ones the deck cites
 const FINDINGS = [

@@ -17,8 +17,8 @@ export default function ThanksSlide() {
             github.com/jasonwong7770/CGI-Hack-the-Hill
           </a>
           {' · '}
-          <a href="https://hack-the-hill-iii.devpost.com/" target="_blank" rel="noopener noreferrer">
-            hack-the-hill-iii.devpost.com
+          <a href="https://devpost.com/software/fixtheflow" target="_blank" rel="noopener noreferrer">
+            devpost.com/software/fixtheflow
           </a>
         </p>
       </Reveal>
