@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import logo from '../assets/logo.png'
 import { DEMO_ACCOUNTS, DEMO_PASSWORD } from '../demoData'
 import { href } from '../routes'
 import { TEAM } from '../team'
@@ -51,7 +50,7 @@ const ROLE_NAMES: Record<UserRole, string> = { customer: 'Customer', employee: '
 
 export default function Landing() {
   useEffect(() => {
-    document.title = 'Northwind Utilities – Hack the Hill III'
+    document.title = 'FixTheFlow – Hack the Hill III'
   }, [])
 
   return (
@@ -59,10 +58,7 @@ export default function Landing() {
       <header className="landing-band landing-sky">
         <div className="landing-inner">
           <nav className="landing-nav" aria-label="Project links">
-            <span className="landing-brand">
-              <img src={logo} alt="" />
-              Northwind Utilities
-            </span>
+            <span className="landing-brand">FixTheFlow</span>
             <a href={REPO_URL} target="_blank" rel="noopener noreferrer">Source on GitHub</a>
           </nav>
 
@@ -70,8 +66,9 @@ export default function Landing() {
             <p className="landing-kicker">Our entry for the CGI CRM challenge at Hack the Hill III</p>
             <h1>One portal for every energy and water request, from the first call to the closed ticket.</h1>
             <p className="landing-lead">
-              Northwind Utilities is a fictional provider serving 1.8 million customers. Its complaints were scattered
-              across four systems. We built the customer service portal that brings them together.
+              FixTheFlow is a customer service portal for Northwind Utilities, a fictional energy and water provider
+              serving 1.8 million customers. Its complaints were scattered across four systems, and FixTheFlow brings
+              them into one place.
             </p>
             <div className="landing-actions">
               <a className="landing-button primary" href={href('app')}>Try the live demo</a>

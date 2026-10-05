@@ -1,6 +1,6 @@
-# CGI-CRM-Hack-the-Hill
+# FixTheFlow
 
-A customer service portal for Northwind Utilities, built for CGI Hack the Hill. Customers submit complaints and maintenance requests, and staff work through them. It's built with TypeScript, React, Vite, and Supabase.
+FixTheFlow is a customer service portal for Northwind Utilities, a fictional utility, built for the CGI CRM challenge at Hack the Hill III ([Devpost](https://devpost.com/software/fixtheflow)). Customers submit complaints and maintenance requests, and staff work through them. It's built with TypeScript, React, Vite, and Supabase.
 
 ## Features
 - Email and password log in (Supabase Auth), with three roles:
@@ -65,5 +65,7 @@ npm run build
 This outputs `dist/`, which you can host anywhere that serves static files. There are two things to know:
 - Routing uses the URL path. The host has to serve `index.html` for unknown paths (an SPA fallback), or `/app` and `/presentation` break on a direct load or refresh.
 - `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are baked in at build time. Leave them unset for a demo deployment, or build with `npm run build:demo`, which blanks them even if your `.env` has real values. For a Supabase deployment, set them in the host's build environment and add the deployed URL under Authentication → URL Configuration in Supabase.
+
+On Vercel, [`vercel.json`](vercel.json) already sets this up: it runs `npm run build:demo` and adds the `index.html` fallback, so importing the repo needs no other settings. To deploy against Supabase instead, override the build command with `npm run build` and set the two env vars.
 
 Every link goes through [`src/routes.ts`](src/routes.ts), which respects Vite's `base`, so the site can also be served from a sub-path such as `/cgi/`.

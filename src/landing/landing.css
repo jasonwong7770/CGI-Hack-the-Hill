@@ -65,8 +65,7 @@
 /* ─── Sky: navigation and hero ──────────────────────────────────────────── */
 
 .landing-nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: clamp(40px, 7vw, 88px); }
-.landing-brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 600; font-size: 1.1rem; }
-.landing-brand img { width: 36px; height: 36px; object-fit: contain; }
+.landing-brand { font-family: var(--display); font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em; }
 .landing-nav a { font-weight: 500; text-underline-offset: 4px; }
 
 .landing-kicker { font-weight: 500; color: var(--ink-soft); }
