@@ -4,7 +4,7 @@ import Calendar from '../../components/Calendar'
 import RequestList from '../../components/RequestList'
 import StaffingDashboard from '../../components/StaffingDashboard'
 import type { MaintenanceRequest } from '../../types'
-import staffingCsv from '../../../northwind_contact_centre_staffing.csv?raw'
+import staffingCsv from '../../../csv/northwind_contact_centre_staffing.csv?raw'
 
 // Sample data for the deck's live screens, using the real complaint taxonomy (src/types.ts)
 const SAMPLE_REQUESTS: MaintenanceRequest[] = [
