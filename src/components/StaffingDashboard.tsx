@@ -174,7 +174,7 @@ function MeterReadInsight({ month, selectedRegion }: { month: string; selectedRe
   )
 }
 
-// initialData preloads a CSV (used by the pitch deck's live screens); the app itself starts empty
+// initialData preloads a CSV (used by the pitch deck's live screens and by demo mode); otherwise it starts empty
 export default function StaffingDashboard({ initialData }: { initialData?: { fileName: string; csv: string } }) {
   const [rows, setRows] = useState<StaffingRow[]>(() => initialData ? mapStaffingCsv(initialData.csv) : [])
   const [fileName, setFileName] = useState(initialData?.fileName ?? '')

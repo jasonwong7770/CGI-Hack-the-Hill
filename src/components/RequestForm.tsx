@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { supabase } from '../supabaseClient'
+import { backend } from '../backend'
 import { COMPLAINT_CATEGORIES, type ComplaintCategory, type RequestCategory } from '../types'
 import BillBreakdown from './BillBreakdown'
 
@@ -37,15 +37,14 @@ export default function RequestForm({ onSubmitted }: { onSubmitted: () => void }
     setError(null)
     setSuccess(false)
 
-    // user_id and status are filled in by database defaults.
-    const { error } = await supabase.from('requests').insert({
+    const { error } = await backend.createRequest({
       category,
-      complaint_category: category === 'complaint' ? complaintCategory : null,
+      complaint_category: category === 'complaint' && complaintCategory ? complaintCategory : null,
       complaint_subcategory: category === 'complaint' && complaintSubcategory ? complaintSubcategory : null,
       message: message.trim(),
     })
 
-    if (error) setError(error.message)
+    if (error) setError(error)
     else {
       setMessage('')
       setCategory('maintenance')

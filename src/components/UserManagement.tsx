@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { supabase } from '../supabaseClient'
+import { backend } from '../backend'
 import type { Profile, UserRole } from '../types'
 
 const ROLES: UserRole[] = ['customer', 'employee', 'manager']
@@ -11,22 +11,19 @@ export default function UserManagement({ currentUserId }: { currentUserId: strin
 
   const fetchProfiles = useCallback(async () => {
     setLoading(true)
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('id, email, role')
-      .order('email')
+    const { data, error } = await backend.listProfiles()
 
-    if (error) setError(error.message)
+    if (error) setError(error)
     else {
       setError(null)
-      setProfiles((data as Profile[]).filter((p) => p.id !== currentUserId))
+      setProfiles(data.filter((p) => p.id !== currentUserId))
     }
     setLoading(false)
   }, [currentUserId])
 
   async function updateRole(id: string, role: UserRole) {
-    const { error } = await supabase.from('profiles').update({ role }).eq('id', id)
-    if (error) setError(error.message)
+    const { error } = await backend.updateRole(id, role)
+    if (error) setError(error)
     else fetchProfiles()
   }
 

@@ -1,28 +1,31 @@
 import { StrictMode, Suspense, lazy } from 'react'
 import { createRoot } from 'react-dom/client'
-import App from './App'
+import { currentRoute } from './routes'
 import './index.css'
 
-// The pitch deck lives at /presentation and is loaded on demand so the app never pays for it
+// Every page loads on demand, so the landing page never pays for the app or the deck
+const Landing = lazy(() => import('./landing/Landing'))
+// The Northwind portal itself, at /app
+const App = lazy(() => import('./App'))
+// The pitch deck, at /presentation
 const Presentation = lazy(() => import('./presentation/Presentation'))
-const isPresentation = /^\/presentation\/?$/.test(window.location.pathname)
-
 // Single app components with sample data, embedded as live screens inside the deck
 const ScreenPreview = lazy(() => import('./presentation/screens/ScreenPreview'))
-const screenName = window.location.pathname.match(/^\/presentation\/screen\/([\w-]+)\/?$/)?.[1]
+
+const route = currentRoute()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {isPresentation ? (
-      <Suspense fallback={null}>
+    <Suspense fallback={null}>
+      {route.name === 'app' ? (
+        <App />
+      ) : route.name === 'presentation' ? (
         <Presentation />
-      </Suspense>
-    ) : screenName ? (
-      <Suspense fallback={null}>
-        <ScreenPreview name={screenName} />
-      </Suspense>
-    ) : (
-      <App />
-    )}
+      ) : route.name === 'screen' ? (
+        <ScreenPreview name={route.screen} />
+      ) : (
+        <Landing />
+      )}
+    </Suspense>
   </StrictMode>,
 )

@@ -1,50 +1,65 @@
 import { useEffect, useState } from 'react'
-import type { Session } from '@supabase/supabase-js'
-import { supabase, isSupabaseConfigured } from './supabaseClient'
+import { backend, type AppUser } from './backend'
 import Auth from './components/Auth'
 import Dashboard from './components/Dashboard'
+import { href } from './routes'
 import type { UserRole } from './types'
 import boilerRoomImage from './assets/boiler room.png'
 import northwindLogo from './assets/logo.png'
 
+// The landing page links to /app?as=<role> to open that role's login straight away
+function requestedRole(): UserRole | null {
+  const as = new URLSearchParams(window.location.search).get('as')
+  return as === 'customer' || as === 'employee' || as === 'manager' ? as : null
+}
+
 export default function App() {
-  const [session, setSession] = useState<Session | null>(null)
+  const [user, setUser] = useState<AppUser | null>(null)
   const [loading, setLoading] = useState(true)
   const [role, setRole] = useState<UserRole | null>(null)
   const [checkingRole, setCheckingRole] = useState(false)
-  const [authRole, setAuthRole] = useState<UserRole | null>(null)
+  const [authRole, setAuthRole] = useState<UserRole | null>(requestedRole)
   const [showRolePicker, setShowRolePicker] = useState(false)
   const [showStaffPicker, setShowStaffPicker] = useState(false)
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session)
+    let active = true
+    async function start() {
+      // Asking for a specific role means switching accounts, so drop the param and any current session
+      if (requestedRole()) {
+        window.history.replaceState(null, '', window.location.pathname + window.location.hash)
+        await backend.signOut()
+      }
+      const current = await backend.getUser()
+      if (!active) return
+      setUser(current)
       setLoading(false)
-    })
+    }
+    start()
 
-    const { data } = supabase.auth.onAuthStateChange((_event, newSession) => {
-      setSession(newSession)
-    })
-    return () => data.subscription.unsubscribe()
+    const unsubscribe = backend.onAuthChange(setUser)
+    return () => {
+      active = false
+      unsubscribe()
+    }
   }, [])
 
+  const userId = user?.id
   useEffect(() => {
-    if (!session) {
+    if (!userId) {
       setRole(null)
       setCheckingRole(false)
       return
     }
     let active = true
     setCheckingRole(true)
-    supabase.from('profiles').select('role').eq('id', session.user.id).single()
-      .then(({ data, error }) => {
-        if (!active) return
-        if (error) console.error('Failed to load profile role:', error)
-        setRole(error ? null : data?.role === 'manager' ? 'manager' : data?.role === 'employee' ? 'employee' : 'customer')
-        setCheckingRole(false)
-      })
+    backend.getRole(userId).then((loadedRole) => {
+      if (!active) return
+      setRole(loadedRole)
+      setCheckingRole(false)
+    })
     return () => { active = false }
-  }, [session])
+  }, [userId])
 
   function chooseRole(selected: UserRole) {
     setShowRolePicker(false)
@@ -58,28 +73,23 @@ export default function App() {
   }
 
   function onSignedOut() {
-    setSession(null)
+    setUser(null)
     setAuthRole(null)
   }
 
   useEffect(() => {
-    if (session) return
+    if (user) return
     if (authRole) {
       document.title = `Sign In (${authRole === 'manager' ? 'Manager' : authRole === 'employee' ? 'Employee' : 'Customer'}) – Northwind Utilities`
     } else {
       document.title = 'Northwind Utilities'
     }
-  }, [session, authRole])
+  }, [user, authRole])
 
   return (
-    <div className={`app${!session && !authRole ? ' app-welcome' : ''}`}>
-      {!isSupabaseConfigured && (
-        <div className="banner">
-          Supabase is not configured. Copy <code>.env.example</code> to <code>.env</code> and add your keys.
-        </div>
-      )}
-      {loading || checkingRole ? <p className="muted center">Loading…</p> : session ? (
-        role ? <Dashboard session={session} role={role} onSignOut={onSignedOut} /> : (
+    <div className={`app${!user && !authRole ? ' app-welcome' : ''}`}>
+      {loading || checkingRole ? <p className="muted center">Loading…</p> : user ? (
+        role ? <Dashboard user={user} role={role} onSignOut={onSignedOut} /> : (
           <div className="card auth"><h1>Account unavailable</h1><p className="muted">We couldn’t load your account profile. Please try again or contact support.</p><button className="secondary" onClick={onSignedOut}>Log out</button></div>
         )
       ) : authRole ? <Auth role={authRole} onBack={() => setAuthRole(null)} /> : (
@@ -93,7 +103,7 @@ export default function App() {
             <div className="welcome-topbar-actions">
               <a
                 className="presentation-link"
-                href="/presentation"
+                href={href('presentation')}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="View presentation"

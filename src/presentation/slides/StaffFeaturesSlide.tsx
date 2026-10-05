@@ -2,6 +2,7 @@ import AppScreen from '../ui/AppScreen'
 import DataTag, { type DataFile } from '../ui/DataTag'
 import Reveal from '../ui/Reveal'
 import SlideLayout from '../ui/SlideLayout'
+import { href } from '../../routes'
 
 // Each screen is the real component rendered with sample data (see screens/ScreenPreview.tsx)
 const FEATURES: { title: string; text: string; screen: string; files: DataFile[] }[] = [
@@ -27,7 +28,7 @@ export default function StaffFeaturesSlide() {
           <Reveal key={feature.title} step={3 + i}>
             <article className="deck-card feature-card">
               <AppScreen
-                src={`/presentation/screen/${feature.screen}`}
+                src={href(`presentation/screen/${feature.screen}`)}
                 title={feature.title}
                 viewportWidth={960}
                 className="feature-shot tall"

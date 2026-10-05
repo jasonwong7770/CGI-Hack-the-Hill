@@ -1,6 +1,7 @@
 import AppScreen from '../ui/AppScreen'
 import BrowserFrame from '../ui/BrowserFrame'
 import Reveal from '../ui/Reveal'
+import { href } from '../../routes'
 
 export default function SolutionSlide() {
   return (
@@ -22,7 +23,7 @@ export default function SolutionSlide() {
       </div>
       <Reveal step={3} className="split-media">
         <BrowserFrame>
-          <AppScreen src="/" title="Northwind Utilities landing page" viewportWidth={1440} />
+          <AppScreen src={href('app')} title="Northwind Utilities landing page" viewportWidth={1440} />
         </BrowserFrame>
       </Reveal>
     </div>

@@ -1,3 +1,4 @@
+import { DEMO_CUSTOMERS } from '../demoData'
 import type { MaintenanceRequest } from '../types'
 
 type Props = {
@@ -25,11 +26,13 @@ function getDemoProfile(customerId: string) {
   const firstName = firstNames[seed % firstNames.length]
   const lastName = lastNames[(seed >>> 3) % lastNames.length]
   const emailSuffix = String(seed % 97).padStart(2, '0')
+  // Demo mode's sample customers keep their real name and email; everything else is generated
+  const known = DEMO_CUSTOMERS.find((customer) => customer.id === customerId)
 
   return {
     id: customerId,
-    name: `${firstName} ${lastName}`,
-    email: `${firstName}.${lastName}${emailSuffix}@example.com`.toLowerCase(),
+    name: known?.name ?? `${firstName} ${lastName}`,
+    email: known?.email ?? `${firstName}.${lastName}${emailSuffix}@example.com`.toLowerCase(),
     phone: `416-555-01${String(seed % 100).padStart(2, '0')}`,
     address: `${10 + (seed % 890)} ${streets[(seed >>> 5) % streets.length]}, Northwind`,
     district: districts[(seed >>> 7) % districts.length],

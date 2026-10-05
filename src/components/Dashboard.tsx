@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import type { Session } from '@supabase/supabase-js'
-import { supabase } from '../supabaseClient'
+import { backend, isDemoMode, resetDemo, type AppUser } from '../backend'
 import type { MaintenanceRequest } from '../types'
 import RequestForm from './RequestForm'
 import RequestList from './RequestList'
@@ -9,6 +8,7 @@ import Calendar from './Calendar'
 import ManagerStats from './ManagerStats'
 import UserManagement from './UserManagement'
 import StaffingDashboard from './StaffingDashboard'
+import staffingCsv from '../../csv/northwind_contact_centre_staffing.csv?raw'
 import type { UserRole } from '../types'
 
 type CustomerTab = 'new-request' | 'bill' | 'calendar' | 'my-requests'
@@ -27,7 +27,7 @@ const CUSTOMER_TAB_TITLES: Record<CustomerTab, string> = {
   'my-requests': 'My Requests',
 }
 
-export default function Dashboard({ session, role, onSignOut }: { session: Session; role: UserRole; onSignOut: () => void }) {
+export default function Dashboard({ user, role, onSignOut }: { user: AppUser; role: UserRole; onSignOut: () => void }) {
   const [requests, setRequests] = useState<MaintenanceRequest[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -35,23 +35,26 @@ export default function Dashboard({ session, role, onSignOut }: { session: Sessi
 
   const fetchRequests = useCallback(async () => {
     setLoading(true)
-    const { data, error } = await supabase
-      .from('requests')
-      .select('*')
-      .order('created_at', { ascending: false })
+    const { data, error } = await backend.listRequests()
 
-    if (error) setError(error.message)
+    if (error) setError(error)
     else {
       setError(null)
-      setRequests(data as MaintenanceRequest[])
+      setRequests(data)
     }
     setLoading(false)
   }, [])
 
   async function closeRequest(requestId: string) {
-    const { error } = await supabase.from('requests').update({ status: 'closed' }).eq('id', requestId)
-    if (error) setError(error.message)
+    const { error } = await backend.closeRequest(requestId)
+    if (error) setError(error)
     else fetchRequests()
+  }
+
+  // Reloading picks up the fresh sample data in every panel, including the manager's account list
+  function resetDemoData() {
+    resetDemo()
+    window.location.reload()
   }
 
   useEffect(() => {
@@ -67,16 +70,24 @@ export default function Dashboard({ session, role, onSignOut }: { session: Sessi
     <div className="dashboard">
       <header className="topbar">
         <div><span className="brand small">Northwind <span>Utilities</span></span><span className="role-label">{role === 'manager' ? 'Manager dashboard' : role === 'employee' ? 'Employee workspace' : 'Customer account'}</span></div>
-        <div className="account-actions"><span className="muted">{session.user.email}</span>
-        <button className="secondary" onClick={async () => { await supabase.auth.signOut(); onSignOut() }}>
+        <div className="account-actions"><span className="muted">{user.email}</span>
+        {isDemoMode && (
+          <button className="secondary" onClick={resetDemoData} title="Put every request and role back to the starting sample data">
+            Reset demo
+          </button>
+        )}
+        <button className="secondary" onClick={async () => { await backend.signOut(); onSignOut() }}>
           Log out
         </button>
         </div>
       </header>
 
-      {role === 'manager' && <StaffingDashboard />}
+      {/* Demo visitors don't have the CSV to upload, so demo mode starts with the challenge data loaded */}
+      {role === 'manager' && (
+        <StaffingDashboard initialData={isDemoMode ? { fileName: 'northwind_contact_centre_staffing.csv', csv: staffingCsv } : undefined} />
+      )}
       {role === 'manager' && <ManagerStats requests={requests} />}
-      {role === 'manager' && <UserManagement currentUserId={session.user.id} />}
+      {role === 'manager' && <UserManagement currentUserId={user.id} />}
       {role === 'employee' && <Calendar employeeView requests={requests} />}
 
       {role === 'customer' && (

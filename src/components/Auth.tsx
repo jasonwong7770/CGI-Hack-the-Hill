@@ -1,25 +1,19 @@
 import { useState, type FormEvent } from 'react'
-import { supabase } from '../supabaseClient'
+import { backend, isDemoMode } from '../backend'
+import { DEMO_ACCOUNTS, DEMO_PASSWORD } from '../demoData'
 import type { UserRole } from '../types'
 
 type Mode = 'login' | 'signup'
 
-// TEMPORARY TEST ONLY: these credentials are exposed in the frontend bundle.
-// Remove them before production and use Supabase-managed credentials instead.
-const EMPLOYEE_TEST_EMAIL = 'support@northwind.ca'
-const EMPLOYEE_TEST_PASSWORD = '12345678'
-const MANAGER_TEST_EMAIL = 'manager@northwind.ca'
-const MANAGER_TEST_PASSWORD = '12345678'
-const CUSTOMER_TEST_EMAIL = 'alejandro.martinez.rmz97@gmail.com'
-const CUSTOMER_TEST_PASSWORD = '123456789'
-
 export default function Auth({ role, onBack }: { role: UserRole; onBack: () => void }) {
   const [mode, setMode] = useState<Mode>('login')
-  const [email, setEmail] = useState(role === 'manager' ? MANAGER_TEST_EMAIL : role === 'employee' ? EMPLOYEE_TEST_EMAIL : CUSTOMER_TEST_EMAIL)
-  const [password, setPassword] = useState(role === 'manager' ? MANAGER_TEST_PASSWORD : role === 'employee' ? EMPLOYEE_TEST_PASSWORD : CUSTOMER_TEST_PASSWORD)
+  // Demo mode fills in the sample account for the chosen role, so visitors only need to press Log in
+  const [email, setEmail] = useState(isDemoMode ? DEMO_ACCOUNTS[role].email ?? '' : '')
+  const [password, setPassword] = useState(isDemoMode ? DEMO_PASSWORD : '')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [info, setInfo] = useState<string | null>(null)
+  const canSignUp = role === 'customer' && !!backend.signUp
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -28,12 +22,12 @@ export default function Auth({ role, onBack }: { role: UserRole; onBack: () => v
     setInfo(null)
 
     if (mode === 'login') {
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) setError(error.message)
-    } else {
-      const { data, error } = await supabase.auth.signUp({ email, password })
-      if (error) setError(error.message)
-      else if (!data.session) setInfo('Account created! Check your email to confirm, then log in.')
+      const { error } = await backend.signIn(email, password)
+      if (error) setError(error)
+    } else if (backend.signUp) {
+      const { error, needsConfirmation } = await backend.signUp(email, password)
+      if (error) setError(error)
+      else if (needsConfirmation) setInfo('Account created! Check your email to confirm, then log in.')
     }
 
     setLoading(false)
@@ -51,6 +45,7 @@ export default function Auth({ role, onBack }: { role: UserRole; onBack: () => v
       <p className="eyebrow">{role === 'manager' ? 'Manager portal' : role === 'employee' ? 'Employee portal' : 'Customer portal'}</p>
       <h1>{mode === 'login' ? 'Log in' : 'Sign up'}</h1>
       <p className="muted">{role === 'manager' ? 'Sign in with your manager account.' : role === 'employee' ? 'Sign in with your employee account.' : 'Submit complaints and maintenance requests.'}</p>
+      {isDemoMode && <p className="demo-note">Demo account: the details are filled in for you.</p>}
 
       <form onSubmit={handleSubmit}>
         <label>
@@ -77,7 +72,7 @@ export default function Auth({ role, onBack }: { role: UserRole; onBack: () => v
         </button>
       </form>
 
-      {role === 'customer' && <p className="switch">
+      {canSignUp && <p className="switch">
         {mode === 'login' ? "Don't have an account?" : 'Already have an account?'}{' '}
         <button type="button" className="link" onClick={switchMode}>{mode === 'login' ? 'Sign up' : 'Log in'}</button>
       </p>}

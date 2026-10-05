@@ -1,4 +1,5 @@
 import type { MouseEvent } from 'react'
+import { href } from '../../routes'
 
 type Props = { index: number; total: number; onPrev: () => void; onNext: () => void }
 
@@ -24,7 +25,7 @@ export default function Controls({ index, total, onPrev, onNext }: Props) {
   return (
     <nav className="deck-controls" aria-label="Slide controls">
       <a
-        href="/"
+        href={href('app')}
         target="_blank"
         rel="noopener noreferrer"
         className="deck-btn deck-home"

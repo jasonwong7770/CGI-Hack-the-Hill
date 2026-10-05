@@ -7,8 +7,8 @@ export const isSupabaseConfigured =
   !!supabaseUrl?.startsWith('http') && !!supabaseAnonKey && !supabaseAnonKey.startsWith('your-')
 
 if (!isSupabaseConfigured) {
-  console.warn(
-    'Supabase is not configured. Copy .env.example to .env and set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.',
+  console.info(
+    'Supabase is not configured, so the app runs in demo mode with sample accounts. To use a real backend, copy .env.example to .env and set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.',
   )
 }
 

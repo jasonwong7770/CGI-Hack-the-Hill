@@ -1,0 +1,179 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Rubik:wght@400;500;600&display=swap');
+
+/* The landing page descends like the deck: sky, street, soil, water main, bedrock, reservoir.
+   Each band starts on the colour the previous one ended on, so the page reads as one cross-section. */
+
+.landing {
+  --ink: #173f58;
+  --ink-soft: #3f5e70;
+  --cream: #f7efe0;
+  --cream-soft: #d8cbb5;
+  --gold: #8a6212;
+  --gold-light: #e3bd70;
+  --water-light: #80bbcf;
+  --sky-from: #8fcbe8;
+  --sky-to: #d3ecf5;
+  --street-to: #f6e8cc;
+  --soil-from: #7b5639;
+  --soil-to: #5b3f2b;
+  --main-to: #3b3130;
+  --bedrock-to: #232a35;
+  --reservoir-to: #0b1822;
+  --display: 'Bricolage Grotesque', 'Avenir Next', system-ui, sans-serif;
+  --body: 'Rubik', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --gutter: max(16px, calc((100% - 1040px) / 2));
+
+  font-family: var(--body);
+  color: var(--ink);
+  background: var(--reservoir-to);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* At night the surface bands dim; underground already is */
+@media (prefers-color-scheme: dark) {
+  .landing {
+    --ink: #e8f1f5;
+    --ink-soft: #b6c9d3;
+    --gold: #e3bd70;
+    --sky-from: #0f2638;
+    --sky-to: #1b3a4d;
+    --street-to: #3a3a33;
+    --soil-from: #4a3524;
+  }
+}
+
+.landing-band { padding: clamp(56px, 9vw, 104px) var(--gutter); }
+.landing-inner { max-width: 1040px; margin: 0 auto; }
+
+.landing-sky { background: linear-gradient(var(--sky-from), var(--sky-to)); padding-top: 24px; }
+.landing-street { background: linear-gradient(var(--sky-to), var(--street-to)); }
+.landing-soil { background: linear-gradient(var(--soil-from), var(--soil-to)); color: var(--cream); }
+.landing-main { background: linear-gradient(var(--soil-to), var(--main-to)); color: var(--cream); }
+.landing-bedrock { background: linear-gradient(var(--main-to), var(--bedrock-to)); color: var(--cream); }
+.landing-reservoir { background: linear-gradient(var(--bedrock-to), var(--reservoir-to)); color: var(--cream-soft); padding-block: 40px; }
+
+.landing a { color: inherit; }
+.landing a:focus-visible { outline: 3px solid var(--water-light); outline-offset: 3px; border-radius: 4px; }
+
+.landing h1,
+.landing h2,
+.landing h3 { font-family: var(--display); margin: 0; }
+.landing h2 { font-size: clamp(1.9rem, 4vw, 2.75rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 16px; }
+.landing h3 { font-size: 1.3rem; font-weight: 600; line-height: 1.2; margin-bottom: 12px; }
+.landing p { line-height: 1.6; max-width: 62ch; margin: 0 0 16px; }
+
+/* ─── Sky: navigation and hero ──────────────────────────────────────────── */
+
+.landing-nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: clamp(40px, 7vw, 88px); }
+.landing-brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 600; font-size: 1.1rem; }
+.landing-brand img { width: 36px; height: 36px; object-fit: contain; }
+.landing-nav a { font-weight: 500; text-underline-offset: 4px; }
+
+.landing-kicker { font-weight: 500; color: var(--ink-soft); }
+.landing-hero h1 {
+  max-width: 18ch;
+  margin-bottom: 24px;
+  font-size: clamp(2.3rem, 5.2vw, 4.4rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+.landing-lead { font-size: 1.15rem; color: var(--ink-soft); }
+
+.landing-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.landing-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.15s, color 0.15s;
+}
+.landing-button:hover { background: color-mix(in srgb, currentColor 12%, transparent); }
+.landing-button.primary { background: var(--ink); border-color: var(--ink); color: var(--sky-to); }
+.landing-button.primary:hover { background: color-mix(in srgb, var(--ink) 85%, var(--sky-to)); }
+.landing-button.small { min-height: 40px; padding: 0 16px; font-size: 0.95rem; justify-self: start; }
+
+/* ─── Street: findings ──────────────────────────────────────────────────── */
+
+.landing-findings { list-style: none; margin: 32px 0 0; padding: 0; display: grid; gap: 28px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.landing-findings li { display: grid; align-content: start; gap: 6px; border-top: 2px solid var(--gold); padding-top: 16px; }
+.landing-findings strong { font-family: var(--display); font-size: 2.6rem; font-weight: 800; line-height: 1; color: var(--gold); }
+.landing-findings span { line-height: 1.5; color: var(--ink-soft); }
+
+/* ─── Soil: a request's journey, joined by a pipe ───────────────────────── */
+
+.landing-section-lead { color: var(--cream-soft); }
+.landing-journey { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; position: relative; }
+.landing-journey::before {
+  content: '';
+  position: absolute;
+  top: 9px;
+  left: 10px;
+  right: 10px;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--water-light), var(--gold-light));
+}
+.landing-journey > li { position: relative; padding-top: 44px; }
+.landing-joint {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--soil-from);
+  border: 5px solid var(--gold-light);
+}
+.landing-journey > li:first-child .landing-joint { border-color: var(--water-light); }
+.landing-journey ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; line-height: 1.5; color: var(--cream-soft); }
+
+/* ─── Water main: demo accounts ─────────────────────────────────────────── */
+
+.landing-accounts { list-style: none; margin: 32px 0 0; padding: 0; display: grid; gap: 1px; background: #f7efe022; border-radius: 14px; overflow: hidden; }
+.landing-accounts li {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1.4fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: #00000033;
+}
+.landing-account-role { font-family: var(--display); font-weight: 600; font-size: 1.1rem; }
+.landing-accounts code { font-size: 0.95rem; color: var(--gold-light); overflow-wrap: anywhere; }
+
+/* ─── Bedrock: stack and team ───────────────────────────────────────────── */
+
+.landing-columns { display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; }
+.landing-columns p { color: var(--cream-soft); }
+.landing-team { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.landing-team a { display: flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 500; }
+.landing-team a:hover span { text-decoration: underline; text-underline-offset: 4px; }
+.landing-team img { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--cream-soft); }
+
+/* ─── Reservoir: footer ─────────────────────────────────────────────────── */
+
+.landing-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 0.95rem; }
+.landing-footer-links { display: flex; gap: 20px; }
+
+/* ─── Small screens ─────────────────────────────────────────────────────── */
+
+@media (max-width: 760px) {
+  /* The pipe turns vertical and runs down the left of the steps */
+  .landing-journey { grid-template-columns: 1fr; gap: 36px; }
+  .landing-journey::before { top: 10px; bottom: 10px; left: 9px; right: auto; width: 6px; height: auto; background: linear-gradient(var(--water-light), var(--gold-light)); }
+  .landing-journey > li { padding: 0 0 0 44px; }
+
+  .landing-accounts li { grid-template-columns: 1fr; gap: 6px; }
+  .landing-button.small { margin-top: 8px; }
+
+  .landing-columns { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-button { transition: none; }
+}
